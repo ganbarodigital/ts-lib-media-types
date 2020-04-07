@@ -1,4 +1,4 @@
-# MediaTypes Library for Typescript
+# MediaType Library for Typescript
 
 ## Introduction
 
@@ -24,12 +24,12 @@ This TypeScript library provides a `MediaType` _value type_ that validates and s
 
 ```
 # run this from your Terminal
-npm install @ganbarodigital/ts-lib-mediatypes
+npm install @ganbarodigital/ts-lib-mediatype
 ```
 
 ```typescript
 // add this import to your Typescript code
-import { MediaType } from "@ganbarodigital/ts-lib-mediatypes/lib/v1"
+import { MediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1"
 ```
 
 __VS Code users:__ once you've added a single import anywhere in your project, you'll then be able to auto-import anything else that this library exports.
@@ -40,7 +40,7 @@ __VS Code users:__ once you've added a single import anywhere in your project, y
 
 ```typescript
 // how to import this into your own code
-import { MediaType } from "@ganbarodigital/ts-lib-mediatypes/lib/v1";
+import { MediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
 
 // base class
 import { RefinedString } from "@ganbarodigital/ts-lib-value-objects/lib/v2";
@@ -70,7 +70,7 @@ Here's how to create it, and how to use it:
 
 ```typescript
 // how to import this into your own code
-import { MediaType } from "@ganbarodigital/ts-lib-mediatypes/lib/v1";
+import { MediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
 
 // create a value object
 const myMediaType = new MediaType("text/html; charset=UTF-8");
@@ -86,7 +86,7 @@ If you try to create a `MediaType` from something that isn't a well-formed media
 
 ```typescript
 // how to import this into your own code
-import { MediaType } from "@ganbarodigital/ts-lib-mediatypes/lib/v1";
+import { MediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
 
 // throws NotAMediaTypeError
 const myMediaType = new MediaType("text");
@@ -96,7 +96,7 @@ const myMediaType = new MediaType("text");
 
 ```typescript
 // how to import this into your own code
-import { MediaTypeParts } from "@ganbarodigital/ts-lib-mediatypes/lib/v1";
+import { MediaTypeParts } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
 
 export interface MediaTypeParts {
     type: string;
@@ -116,7 +116,7 @@ There are two ways to get one:
 
 ```typescript
 // how to import this into your own code
-import { MediaType, parseMediaType } from "@ganbarodigital/ts-lib-mediatypes/lib/v1";
+import { MediaType, parseMediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
 
 const parts1 = parseMediaType("text/html; charset=UTF-8");
 
@@ -130,7 +130,7 @@ const parts2 = myMediaType.parse();
 
 ```typescript
 // how to import this into your own code
-import { isMediaType } from "@ganbarodigital/ts-lib-mediatypes/lib/v1";
+import { isMediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
 
 /**
  * Data guard. Returns `true` if the input string matches the structure
@@ -149,7 +149,7 @@ export function isMediaType(input: string): boolean;
 
 ```typescript
 // how to import this into your own code
-import { parseMediaType } from "@ganbarodigital/ts-lib-mediatypes/lib/v1";
+import { parseMediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
 
 // types used for parameters
 import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
@@ -170,7 +170,7 @@ export function parseMediaType(
 
 ```typescript
 // how to import this into your own code
-import { mustBeMediaType } from "@ganbarodigital/ts-lib-mediatypes/lib/v1";
+import { mustBeMediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
 
 // types used for parameters
 import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
@@ -191,7 +191,7 @@ export function mustBeMediaType(input: string, onError: OnError = THROW_THE_ERRO
 
 ```typescript
 // how to import this into your own code
-import { MediaTypeMatchRegexIsBrokenError } from "@ganbarodigital/ts-lib-mediatypes/lib/v1";
+import { MediaTypeMatchRegexIsBrokenError } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
 
 // base class
 import { AppError, AppErrorParams } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
@@ -209,7 +209,7 @@ This is an internal error. Hopefully, you'll never see it occur.
 
 ```typescript
 // how to import this into your own code
-import { NotAMediaTypeError } from "@ganbarodigital/ts-lib-mediatypes/lib/v1";
+import { NotAMediaTypeError } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
 
 // base class
 import { AppError, AppErrorParams } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
