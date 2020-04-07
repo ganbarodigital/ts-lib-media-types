@@ -2,11 +2,11 @@
 
 ## Introduction
 
-This TypeScript library provides a `MediaType` type that supports [RFC 2045][RFC 2045] and [RFC 6838][RFC 6838] MediaType strings:
+This TypeScript library provides a `MediaType` _value type_ that validates and supports [RFC 2045][RFC 2045] and [RFC 6838][RFC 6838] "media type" strings:
 
 - [Introduction](#introduction)
 - [Quick Start](#quick-start)
-- [V1 API](#v1-api)
+- [v1 API](#v1-api)
   - [MediaType Value Type](#mediatype-value-type)
   - [MediaTypeParts](#mediatypeparts)
   - [isMediaType()](#ismediatype)
