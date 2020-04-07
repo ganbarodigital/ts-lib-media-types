@@ -32,7 +32,7 @@ import { MediaType } from "@ganbarodigital/ts-lib-mediatypes/lib/v1"
 
 __VS Code users:__ once you've added a single import anywhere in your project, you'll then be able to auto-import anything else that this library exports.
 
-## V1 API
+## v1 API
 
 ### MediaType Value Type
 
@@ -62,7 +62,7 @@ export class MediaType extends RefinedString {
 }
 ```
 
-`MediaType` is a _value type_. It represents an RFC-compliant media type string that has been successfully validated.
+`MediaType` is a _value type_. It represents an RFC-compliant media type string that has been successfully validated. You don't have to validate it yourself; the constructor will do that for you.
 
 Here's how to create it, and how to use it:
 
@@ -78,6 +78,16 @@ console.log("myMediaType is: " + myMediaType);
 
 // if you run into any auto-convert problems, call `.valueOf()`:
 const parts = parseMediaType(myMediaType.valueOf());
+```
+
+If you try to create a `MediaType` from something that isn't a well-formed media type, the constructor will throw an Error:
+
+```typescript
+// how to import this into your own code
+import { MediaType } from "@ganbarodigital/ts-lib-mediatypes/lib/v1";
+
+// throws NotAMediaTypeError
+const myMediaType = new MediaType("text");
 ```
 
 ### MediaTypeParts Value Type
@@ -97,7 +107,22 @@ export interface MediaTypeParts {
 
 `MediaTypeParts` is a _value type_. It contains the parsed contents of a MediaType.
 
-Call [`parseMediaType()`](#parsemediatype) to get a `MediaTypeParts` object from your MediaType.
+There are two ways to get one:
+
+* call [`parseMediaType()`](#parsemediatype) to get a `MediaTypeParts` object from a string, or
+* call `MediaType.parse()`
+
+```typescript
+// how to import this into your own code
+import { MediaType, parseMediaType } from "@ganbarodigital/ts-lib-mediatypes/lib/v1";
+
+const parts1 = parseMediaType("text/html; charset=UTF-8");
+
+const myMediaType = new MediaType("text/html; charset=UTF-8");
+const parts2 = myMediaType.parse();
+
+// at this point, parts1 and parts2 contain the same information
+```
 
 ### isMediaType()
 
@@ -160,7 +185,7 @@ export function mustBeMediaType(input: string, onError: OnError = THROW_THE_ERRO
 
 `mustBeMediaType()` is a _data guarantee_. Use it to ensure that the given string has the structure of a RFC-compliant media type.
 
-### MediaTypeMatchRegexIsBroken Error
+### MediaTypeMatchRegexIsBrokenError
 
 ```typescript
 // how to import this into your own code
@@ -174,11 +199,11 @@ export class MediaTypeMatchRegexIsBrokenError extends AppError {
 }
 ```
 
-`MediaTypeMatchRegexIsBroken` is a throwable, structured `Error`. It's thrown whenever we break one of the regexes that we use to parse media type strings.
+`MediaTypeMatchRegexIsBrokenError` is a throwable, structured `Error`. It's thrown whenever we break one of the regexes that we use to parse media type strings.
 
-This is an internal error.
+This is an internal error. Hopefully, you'll never see it occur.
 
-### NotAMediaType Error
+### NotAMediaTypeError
 
 ```typescript
 // how to import this into your own code
@@ -199,7 +224,7 @@ export class NotAMediaTypeError extends AppError {
 }
 ```
 
-`NotAMediaType` is a throwable, structured `Error`. It's thrown whenever a string doesn't have the expected structure of a media type.
+`NotAMediaTypeError` is a throwable, structured `Error`. It's thrown whenever a string doesn't have the expected structure of a media type.
 
 ## NPM Scripts
 
