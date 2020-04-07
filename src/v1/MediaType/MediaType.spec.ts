@@ -34,55 +34,46 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 
-import { MediaTypeMatchRegexIsBrokenError } from "../Errors/MediaTypeMatchRegexIsBroken";
+import { MediaType } from "./MediaType";
 import { InvalidMediaTypeExamples, ValidMediaTypeExamples } from "./MediaTypeExamples.spec";
-import { parseMediaType, parseMediaTypeWithParsers } from "./parseMediaType";
-import { MediaTypeParamRegex } from "./regexes";
 
-// a valid regex, that doesn't populate named groups
-const BrokenMatchRegex = /^.*$/;
+describe("MediaType", () => {
+    describe("constructor()", () => {
+        // tslint:disable-next-line: forin
+        for (const inputValue in ValidMediaTypeExamples) {
+            it("accepts example '" + inputValue + "'", () => {
+                const actualValue = new MediaType(inputValue);
 
-describe("parseMediaType()", () => {
-    // tslint:disable-next-line: forin
-    for (const inputValue in ValidMediaTypeExamples) {
-        it("correctly parses '" + inputValue + '"', () => {
-            const expectedValue = ValidMediaTypeExamples[inputValue];
-            const actualValue = parseMediaType(inputValue);
+                expect(actualValue.valueOf()).to.equal(inputValue);
+            });
+        }
 
-            expect(actualValue).to.eql(expectedValue);
-        });
-    }
-
-    for (const inputValue of InvalidMediaTypeExamples) {
-        it("rejects example '" + inputValue + "'", () => {
-            expect(() => parseMediaType(inputValue)).to.throw();
-        });
-    }
-
-    it("throws MediaTypeMatchRegexIsBrokenError if we use a garbage parser", () => {
-        const inputValue = "text/plain";
-        expect(() => parseMediaTypeWithParsers(
-            BrokenMatchRegex,
-            MediaTypeParamRegex,
-            inputValue,
-        )).to.throw(MediaTypeMatchRegexIsBrokenError);
+        for (const inputValue of InvalidMediaTypeExamples) {
+            it("rejects example '" + inputValue + "'", () => {
+                expect(() => new MediaType(inputValue)).to.throw();
+            });
+        }
     });
 
-    // one day, I hope auto-conversion makes this possible!
-    //
-    // it("accepts a MediaType input type", () => {
-    //     const inputValue = "text/html; charset=UTF-8";
-    //     const expectedValue: MediaTypeParts = {
-    //         type: "text",
-    //         subtype: "html",
-    //         parameters: {
-    //             charset: "UTF-8",
-    //         },
-    //     };
+    describe(".parse()", () => {
+        // tslint:disable-next-line: forin
+        for (const inputValue in ValidMediaTypeExamples) {
+            it("correctly parses '" + inputValue + '"', () => {
+                const expectedValue = ValidMediaTypeExamples[inputValue];
+                const unit = new MediaType(inputValue);
 
-    //     const unit = new MediaType(inputValue);
-    //     const actualValue = parseMediaType(unit);
+                const actualValue = unit.parse();
+                expect(actualValue).to.eql(expectedValue);
+            });
+        }
+    });
 
-    //     expect(actualValue).to.eql(expectedValue);
-    // });
+    it("can be used as a string", () => {
+        const expectedValue = "text/plain is a media type";
+        const unit = new MediaType("text/plain");
+
+        const actualValue = unit + " is a media type";
+
+        expect(actualValue).to.equal(expectedValue);
+    });
 });

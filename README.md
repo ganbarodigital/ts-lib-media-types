@@ -36,11 +36,56 @@ __VS Code users:__ once you've added a single import anywhere in your project, y
 
 ### MediaType Value Type
 
-TBD.
+```typescript
+// how to import this into your own code
+import { MediaType } from "@ganbarodigital/ts-lib-mediatypes/lib/v1";
+
+// base class
+import { RefinedString } from "@ganbarodigital/ts-lib-value-objects/lib/v2";
+
+// types used for parameters
+import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+
+export class MediaType extends RefinedString {
+    /**
+     * smart constructor.
+     *
+     * calls your `onError` handler if `input` isn't a well-formatted
+     * media type
+     */
+    public constructor(input: string, onError: OnError = THROW_THE_ERROR);
+
+    /**
+     * returns a breakdown of the individual components for this media type
+     */
+    public parse(onError: OnError = THROW_THE_ERROR): MediaTypeParts;
+}
+```
+
+`MediaType` is a _value type_. It represents an RFC-compliant media type string that has been successfully validated.
+
+Here's how to create it, and how to use it:
+
+```typescript
+// how to import this into your own code
+import { MediaType } from "@ganbarodigital/ts-lib-mediatypes/lib/v1";
+
+// create a value object
+const myMediaType = new MediaType("text/html; charset=UTF-8");
+
+// it will auto-convert to a string in most places
+console.log("myMediaType is: " + myMediaType);
+
+// if you run into any auto-convert problems, call `.valueOf()`:
+const parts = parseMediaType(myMediaType.valueOf());
+```
 
 ### MediaTypeParts Value Type
 
 ```typescript
+// how to import this into your own code
+import { MediaTypeParts } from "@ganbarodigital/ts-lib-mediatypes/lib/v1";
+
 export interface MediaTypeParts {
     type: string;
     tree?: string;
