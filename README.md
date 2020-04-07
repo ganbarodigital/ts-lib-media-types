@@ -75,13 +75,30 @@ export function isMediaType(input: string): boolean;
 
 ### parseMediaType()
 
-TBD.
+```typescript
+// how to import this into your own code
+import { parseMediaType } from "@ganbarodigital/ts-lib-mediatypes/lib/v1";
+
+// types used for parameters
+import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+
+/**
+ * Data parser. Breaks down an RFC-compliant MediaType into its
+ * individual parts.
+ */
+export function parseMediaType(
+    input: string,
+    onError: OnError = THROW_THE_ERROR,
+): MediaTypeParts;
+```
+
+`parseMediaType()` is a _data parser_. Use it to break down the contents of a media type into its individual parts.
 
 ### mustBeMediaType()
 
 ```typescript
 // how to import this into your own code
-import { isMediaType } from "@ganbarodigital/ts-lib-mediatypes/lib/v1";
+import { mustBeMediaType } from "@ganbarodigital/ts-lib-mediatypes/lib/v1";
 
 // types used for parameters
 import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
@@ -97,6 +114,24 @@ export function mustBeMediaType(input: string, onError: OnError = THROW_THE_ERRO
 ```
 
 `mustBeMediaType()` is a _data guarantee_. Use it to ensure that the given string has the structure of a RFC-compliant media type.
+
+### MediaTypeMatchRegexIsBroken Error
+
+```typescript
+// how to import this into your own code
+import { MediaTypeMatchRegexIsBrokenError } from "@ganbarodigital/ts-lib-mediatypes/lib/v1";
+
+// base class
+import { AppError, AppErrorParams } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+
+export class MediaTypeMatchRegexIsBrokenError extends AppError {
+    public constructor(params: AppErrorParams);
+}
+```
+
+`MediaTypeMatchRegexIsBroken` is a throwable, structured `Error`. It's thrown whenever we break one of the regexes that we use to parse media type strings.
+
+This is an internal error.
 
 ### NotAMediaType Error
 

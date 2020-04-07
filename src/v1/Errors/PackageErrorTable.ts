@@ -40,6 +40,7 @@ import {
 import { httpStatusCodeFrom } from "@ganbarodigital/ts-lib-http-types/lib/v1";
 import { packageNameFrom } from "@ganbarodigital/ts-lib-packagename/lib/v1";
 
+import { MediaTypeMatchRegexIsBrokenTemplate } from "./MediaTypeMatchRegexIsBroken";
 import { NotAMediaTypeTemplate } from "./NotAMediaType";
 
 const PACKAGE_NAME = packageNameFrom("@ganbarodigital/ts-lib-mediatypes");
@@ -50,6 +51,14 @@ type PackageErrorTableIndex<T extends ErrorTable> = ErrorTableTemplateWithNoExtr
 
 export class PackageErrorTable implements ErrorTable {
     [key: string]: PackageErrorTableIndex<PackageErrorTable>;
+
+    public "mediatypematchregex-is-broken": MediaTypeMatchRegexIsBrokenTemplate = {
+        packageName: PACKAGE_NAME,
+        errorName: "mediatypematchregex-is-broken",
+        detail: "the MediaTypeMatchRegex no longer returns the expected named groups",
+        status: httpStatusCodeFrom(500),
+        extra: null,
+    };
 
     public "not-a-media-type": NotAMediaTypeTemplate = {
         packageName: PACKAGE_NAME,

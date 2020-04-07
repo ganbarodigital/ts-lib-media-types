@@ -26,8 +26,10 @@ The following changes have been completed, and will be included in the next tagg
 ### New
 
 * Added `isMediaType()` data guard
+* Added `MediaTypeMatchRegexIsBrokenError` structured Error
 * Added `mustBeMediaType()` data guarantee
-* Added `NotAMediaType` structured Error
+* Added `NotAMediaTypeError` structured Error
+* Added `parseMediaType()` data parser
 * Added MediaTypeParts value type
 * Added MediaTypeMatchRegex
 * Added MediaTypeParamRegex

@@ -35,3 +35,4 @@
 export * from "./isMediaType";
 export * from "./mustBeMediaType";
 export * from "./MediaTypeParts";
+export * from "./parseMediaType";

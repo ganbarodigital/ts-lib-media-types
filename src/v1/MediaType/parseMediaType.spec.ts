@@ -31,7 +31,40 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import { expect } from "chai";
+import { describe } from "mocha";
 
-export { ERROR_TABLE } from "./PackageErrorTable";
-export { NotAMediaTypeError } from "./NotAMediaType";
-export { MediaTypeMatchRegexIsBrokenError } from "./MediaTypeMatchRegexIsBroken";
+import { MediaTypeMatchRegexIsBrokenError } from "../Errors/MediaTypeMatchRegexIsBroken";
+import { InvalidMediaTypeExamples, ValidMediaTypeExamples } from "./MediaTypeExamples.spec";
+import { parseMediaType, parseMediaTypeWithParsers } from "./parseMediaType";
+import { MediaTypeParamRegex } from "./regexes";
+
+// a valid regex, that doesn't populate named groups
+const BrokenMatchRegex = /^.*$/;
+
+describe("parseMediaType()", () => {
+    // tslint:disable-next-line: forin
+    for (const inputValue in ValidMediaTypeExamples) {
+        it("correctly parses '" + inputValue + '"', () => {
+            const expectedValue = ValidMediaTypeExamples[inputValue];
+            const actualValue = parseMediaType(inputValue);
+
+            expect(actualValue).to.eql(expectedValue);
+        });
+    }
+
+    for (const inputValue of InvalidMediaTypeExamples) {
+        it("rejects example '" + inputValue + "'", () => {
+            expect(() => parseMediaType(inputValue)).to.throw();
+        });
+    }
+
+    it("throws MediaTypeMatchRegexIsBrokenError if we use a garbage parser", () => {
+        const inputValue = "text/plain";
+        expect(() => parseMediaTypeWithParsers(
+            BrokenMatchRegex,
+            MediaTypeParamRegex,
+            inputValue,
+        )).to.throw(MediaTypeMatchRegexIsBrokenError);
+    });
+});

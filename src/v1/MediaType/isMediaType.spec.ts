@@ -35,13 +35,22 @@ import { expect } from "chai";
 import { describe } from "mocha";
 
 import { isMediaType } from "./isMediaType";
-import { ValidMediaTypeExamples } from "./MediaTypeExamples.spec";
+import { InvalidMediaTypeExamples, ValidMediaTypeExamples } from "./MediaTypeExamples.spec";
 
 describe("isMediaType()", () => {
     // tslint:disable-next-line: forin
     for (const inputValue in ValidMediaTypeExamples) {
         it("accepts example '" + inputValue + "'", () => {
             const expectedValue = true;
+            const actualValue = isMediaType(inputValue);
+
+            expect(actualValue).to.equal(expectedValue);
+        });
+    }
+
+    for (const inputValue of InvalidMediaTypeExamples) {
+        it("rejects example '" + inputValue + "'", () => {
+            const expectedValue = false;
             const actualValue = isMediaType(inputValue);
 
             expect(actualValue).to.equal(expectedValue);
