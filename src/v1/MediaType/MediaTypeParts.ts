@@ -32,5 +32,15 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 
-export * from "./Errors";
-export * from "./MediaType";
+/**
+ * the structure of a MediaType
+ *
+ * call parseMediaType() to get your MediaType broken down
+ */
+export interface MediaTypeParts {
+    type: string;
+    tree?: string;
+    subtype: string;
+    suffix?: string;
+    parameters?: {[parameter: string]: string};
+}

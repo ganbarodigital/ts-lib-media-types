@@ -31,6 +31,21 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import { expect } from "chai";
+import { describe } from "mocha";
 
-export * from "./Errors";
-export * from "./MediaType";
+import { NotAMediaTypeError } from "./NotAMediaType";
+
+describe("NotAMediaTypeError", () => {
+    describe(".constructor()", () => {
+        it("creates a Javascript error", () => {
+            const unit = new NotAMediaTypeError({
+                public: {
+                    input: "dummy",
+                },
+            });
+
+            expect(unit).to.be.instanceOf(Error);
+        });
+    });
+});

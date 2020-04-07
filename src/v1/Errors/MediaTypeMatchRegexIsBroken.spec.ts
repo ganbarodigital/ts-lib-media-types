@@ -31,6 +31,17 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import { expect } from "chai";
+import { describe } from "mocha";
 
-export * from "./Errors";
-export * from "./MediaType";
+import { MediaTypeMatchRegexIsBrokenError } from "./MediaTypeMatchRegexIsBroken";
+
+describe("MediaTypeMatchRegexIsBrokenError", () => {
+    describe(".constructor()", () => {
+        it("creates a Javascript error", () => {
+            const unit = new MediaTypeMatchRegexIsBrokenError({});
+
+            expect(unit).to.be.instanceOf(Error);
+        });
+    });
+});

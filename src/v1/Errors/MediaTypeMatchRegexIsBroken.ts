@@ -31,6 +31,53 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import {
+    AppError,
+    AppErrorParams,
+    ErrorTableTemplateWithNoExtraData,
+    NoExtraDataTemplate,
+    StructuredProblemReport,
+    StructuredProblemReportDataWithNoExtraData,
+} from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
 
-export * from "./Errors";
-export * from "./MediaType";
+import { ERROR_TABLE, PackageErrorTable } from "./PackageErrorTable";
+
+export type MediaTypeMatchRegexIsBrokenTemplate = ErrorTableTemplateWithNoExtraData<
+    PackageErrorTable,
+    "mediatypematchregex-is-broken",
+    NoExtraDataTemplate
+>;
+
+export type MediaTypeMatchRegexIsBrokenData = StructuredProblemReportDataWithNoExtraData<
+    PackageErrorTable,
+    "mediatypematchregex-is-broken",
+    MediaTypeMatchRegexIsBrokenTemplate,
+    NoExtraDataTemplate
+>;
+
+export type MediaTypeMatchRegexIsBrokenSPR = StructuredProblemReport<
+    PackageErrorTable,
+    "mediatypematchregex-is-broken",
+    MediaTypeMatchRegexIsBrokenTemplate,
+    NoExtraDataTemplate,
+    MediaTypeMatchRegexIsBrokenData
+>;
+
+export class MediaTypeMatchRegexIsBrokenError extends AppError<
+    PackageErrorTable,
+    "mediatypematchregex-is-broken",
+    MediaTypeMatchRegexIsBrokenTemplate,
+    NoExtraDataTemplate,
+    MediaTypeMatchRegexIsBrokenData,
+    MediaTypeMatchRegexIsBrokenSPR
+> {
+    public constructor(params: AppErrorParams) {
+        const errorData: MediaTypeMatchRegexIsBrokenData = {
+            template: ERROR_TABLE["mediatypematchregex-is-broken"],
+            errorId: params.errorId,
+            extra: null,
+        };
+
+        super(StructuredProblemReport.from(errorData));
+    }
+}

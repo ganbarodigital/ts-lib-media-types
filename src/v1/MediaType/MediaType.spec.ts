@@ -31,6 +31,49 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import { expect } from "chai";
+import { describe } from "mocha";
 
-export * from "./Errors";
-export * from "./MediaType";
+import { MediaType } from "./MediaType";
+import { InvalidMediaTypeExamples, ValidMediaTypeExamples } from "./MediaTypeExamples.spec";
+
+describe("MediaType", () => {
+    describe("constructor()", () => {
+        // tslint:disable-next-line: forin
+        for (const inputValue in ValidMediaTypeExamples) {
+            it("accepts example '" + inputValue + "'", () => {
+                const actualValue = new MediaType(inputValue);
+
+                expect(actualValue.valueOf()).to.equal(inputValue);
+            });
+        }
+
+        for (const inputValue of InvalidMediaTypeExamples) {
+            it("rejects example '" + inputValue + "'", () => {
+                expect(() => new MediaType(inputValue)).to.throw();
+            });
+        }
+    });
+
+    describe(".parse()", () => {
+        // tslint:disable-next-line: forin
+        for (const inputValue in ValidMediaTypeExamples) {
+            it("correctly parses '" + inputValue + '"', () => {
+                const expectedValue = ValidMediaTypeExamples[inputValue];
+                const unit = new MediaType(inputValue);
+
+                const actualValue = unit.parse();
+                expect(actualValue).to.eql(expectedValue);
+            });
+        }
+    });
+
+    it("can be used as a string", () => {
+        const expectedValue = "text/plain is a media type";
+        const unit = new MediaType("text/plain");
+
+        const actualValue = unit + " is a media type";
+
+        expect(actualValue).to.equal(expectedValue);
+    });
+});

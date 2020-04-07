@@ -31,6 +31,29 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import { expect } from "chai";
+import { describe } from "mocha";
 
-export * from "./Errors";
-export * from "./MediaType";
+import { isMediaType } from "./isMediaType";
+import { InvalidMediaTypeExamples, ValidMediaTypeExamples } from "./MediaTypeExamples.spec";
+
+describe("isMediaType()", () => {
+    // tslint:disable-next-line: forin
+    for (const inputValue in ValidMediaTypeExamples) {
+        it("accepts example '" + inputValue + "'", () => {
+            const expectedValue = true;
+            const actualValue = isMediaType(inputValue);
+
+            expect(actualValue).to.equal(expectedValue);
+        });
+    }
+
+    for (const inputValue of InvalidMediaTypeExamples) {
+        it("rejects example '" + inputValue + "'", () => {
+            const expectedValue = false;
+            const actualValue = isMediaType(inputValue);
+
+            expect(actualValue).to.equal(expectedValue);
+        });
+    }
+});

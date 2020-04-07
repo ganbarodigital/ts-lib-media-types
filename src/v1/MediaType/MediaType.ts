@@ -31,6 +31,31 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+import { RefinedString } from "@ganbarodigital/ts-lib-value-objects/lib/v2";
 
-export * from "./Errors";
-export * from "./MediaType";
+import { MediaTypeParts } from "./MediaTypeParts";
+import { mustBeMediaType } from "./mustBeMediaType";
+import { parseMediaType } from "./parseMediaType";
+
+/**
+ * value type. Represents RFC-compliant media type strings.
+ */
+export class MediaType extends RefinedString {
+    /**
+     * smart constructor.
+     *
+     * calls your `onError` handler if `input` isn't a well-formatted
+     * media type
+     */
+    public constructor(input: string, onError: OnError = THROW_THE_ERROR) {
+        super(input, mustBeMediaType, onError);
+    }
+
+    /**
+     * returns a breakdown of the individual components for this media type
+     */
+    public parse(onError: OnError = THROW_THE_ERROR): MediaTypeParts {
+        return parseMediaType(this.value, onError);
+    }
+}

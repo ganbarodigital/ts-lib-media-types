@@ -32,5 +32,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 
-export * from "./Errors";
-export * from "./MediaType";
+export * from "./isMediaType";
+export * from "./mustBeMediaType";
+export * from "./MediaTypeParts";
+export * from "./parseMediaType";

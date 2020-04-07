@@ -31,6 +31,57 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import { MediaTypeParts } from "./MediaTypeParts";
 
-export * from "./Errors";
-export * from "./MediaType";
+export interface MediaTypeExamples {
+    [mediaType: string]: MediaTypeParts;
+}
+
+export const ValidMediaTypeExamples: MediaTypeExamples = {
+    "text/plain": {
+        type: "text",
+        subtype: "plain",
+    },
+    "text/plain; charset=us-ascii": {
+        type: "text",
+        subtype: "plain",
+        parameters: {
+            charset: "us-ascii",
+        },
+    },
+    'text/plain; charset="us-ascii"': {
+        type: "text",
+        subtype: "plain",
+        parameters: {
+            charset: "us-ascii",
+        },
+    },
+    "text/plain; charset=ISO-8859-1": {
+        type: "text",
+        subtype: "plain",
+        parameters: {
+            charset: "ISO-8859-1",
+        },
+    },
+    "application/vnd.record": {
+        type: "application",
+        tree: "vnd",
+        subtype: "record",
+    },
+    "application/vnd.tie-record": {
+        type: "application",
+        tree: "vnd",
+        subtype: "tie-record",
+    },
+    "application/vnd.tie-record+json": {
+        type: "application",
+        tree: "vnd",
+        subtype: "tie-record",
+        suffix: "json",
+    },
+};
+
+export const InvalidMediaTypeExamples = [
+    "text",
+    "text/plain; boundary=123:456",
+];
