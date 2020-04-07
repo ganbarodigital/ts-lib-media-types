@@ -44,7 +44,22 @@ TBD.
 
 ### isMediaType()
 
-TBD.
+```typescript
+// how to import this into your own code
+import { isMediaType } from "@ganbarodigital/ts-lib-mediatypes/lib/v1";
+
+/**
+ * Data guard. Returns `true` if the input string matches the structure
+ * of an RFC2046 / RFC6838 media type.
+ *
+ * @param input
+ */
+export function isMediaType(input: string): boolean;
+```
+
+`isMediaType()` is a _data guard_. Use it to prove that a string contains something with the structure of a MediaType:
+
+    type "/" [tree "."] subtype ["+" suffix] *[";" parameter]
 
 ### parseMediaType()
 
