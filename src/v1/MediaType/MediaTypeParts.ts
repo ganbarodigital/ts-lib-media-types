@@ -31,52 +31,16 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
-import { MediaTypeParts } from "./MediaTypeParts";
 
-export interface MediaTypeExamples {
-    [mediaType: string]: MediaTypeParts;
+/**
+ * the structure of a MediaType
+ *
+ * call parseMediaType() to get your MediaType broken down
+ */
+export interface MediaTypeParts {
+    type: string;
+    tree?: string;
+    subtype: string;
+    suffix?: string;
+    parameters?: {[parameter: string]: string};
 }
-
-export const ValidMediaTypeExamples: MediaTypeExamples = {
-    "text/plain": {
-        type: "text",
-        subtype: "plain",
-    },
-    "text/plain; charset=us-ascii": {
-        type: "text",
-        subtype: "plain",
-        parameters: {
-            charset: "us-ascii",
-        },
-    },
-    'text/plain; charset="us-ascii"': {
-        type: "text",
-        subtype: "plain",
-        parameters: {
-            charset: "us-ascii",
-        },
-    },
-    "text/plain; charset=ISO-8859-1": {
-        type: "text",
-        subtype: "plain",
-        parameters: {
-            charset: "ISO-8859-1",
-        },
-    },
-    "application/vnd.record": {
-        type: "application",
-        tree: "vnd",
-        subtype: "record",
-    },
-    "application/vnd.tie-record": {
-        type: "application",
-        tree: "vnd",
-        subtype: "tie-record",
-    },
-    "application/vnd.tie-record+json": {
-        type: "application",
-        tree: "vnd",
-        subtype: "tie-record",
-        suffix: "json",
-    },
-};

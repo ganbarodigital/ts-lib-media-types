@@ -38,9 +38,21 @@ __VS Code users:__ once you've added a single import anywhere in your project, y
 
 TBD.
 
-### MediaTypeParts
+### MediaTypeParts Value Type
 
-TBD.
+```typescript
+export interface MediaTypeParts {
+    type: string;
+    tree?: string;
+    subtype: string;
+    suffix?: string;
+    parameters?: {[parameter: string]: string};
+}
+```
+
+`MediaTypeParts` is a _value type_. It contains the parsed contents of a MediaType.
+
+Call [`parseMediaType()`](#parsemediatype) to get a `MediaTypeParts` object from your MediaType.
 
 ### isMediaType()
 
