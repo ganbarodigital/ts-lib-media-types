@@ -33,3 +33,4 @@
 //
 
 export * from "./isMediaType";
+export * from "./MediaTypeParts";
