@@ -32,6 +32,5 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 
-export * from "./isMediaType";
-export * from "./mustBeMediaType";
-export * from "./MediaTypeParts";
+export { ERROR_TABLE } from "./PackageErrorTable";
+export { NotAMediaTypeError } from "./NotAMediaType";

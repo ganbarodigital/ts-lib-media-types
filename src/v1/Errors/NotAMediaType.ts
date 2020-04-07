@@ -31,7 +31,61 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import {
+    AppError,
+    AppErrorParams,
+    ErrorTableTemplateWithExtraData,
+    ExtraPublicData,
+    StructuredProblemReport,
+    StructuredProblemReportDataWithExtraData,
+} from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
 
-export * from "./isMediaType";
-export * from "./mustBeMediaType";
-export * from "./MediaTypeParts";
+import { ERROR_TABLE, PackageErrorTable } from "./PackageErrorTable";
+
+export interface NotAMediaTypeExtraData extends ExtraPublicData {
+    public: {
+        input: string;
+    };
+}
+
+export type NotAMediaTypeTemplate = ErrorTableTemplateWithExtraData<
+    PackageErrorTable,
+    "not-a-media-type",
+    NotAMediaTypeExtraData
+>;
+
+export type NotAMediaTypeData = StructuredProblemReportDataWithExtraData<
+    PackageErrorTable,
+    "not-a-media-type",
+    NotAMediaTypeTemplate,
+    NotAMediaTypeExtraData
+>;
+
+export type NotAMediaTypeSPR = StructuredProblemReport<
+    PackageErrorTable,
+    "not-a-media-type",
+    NotAMediaTypeTemplate,
+    NotAMediaTypeExtraData,
+    NotAMediaTypeData
+>;
+
+export class NotAMediaTypeError extends AppError<
+    PackageErrorTable,
+    "not-a-media-type",
+    NotAMediaTypeTemplate,
+    NotAMediaTypeExtraData,
+    NotAMediaTypeData,
+    NotAMediaTypeSPR
+> {
+    public constructor(params: NotAMediaTypeExtraData & AppErrorParams) {
+        const errorData: NotAMediaTypeData = {
+            template: ERROR_TABLE["not-a-media-type"],
+            errorId: params.errorId,
+            extra: {
+                public: params.public,
+            },
+        };
+
+        super(StructuredProblemReport.from(errorData));
+    }
+}

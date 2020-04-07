@@ -31,7 +31,37 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import {
+    ErrorTable,
+    ErrorTableTemplateWithNoExtraData,
+    ExtraDataTemplate,
+    NoExtraDataTemplate,
+} from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+import { httpStatusCodeFrom } from "@ganbarodigital/ts-lib-http-types/lib/v1";
+import { packageNameFrom } from "@ganbarodigital/ts-lib-packagename/lib/v1";
 
-export * from "./isMediaType";
-export * from "./mustBeMediaType";
-export * from "./MediaTypeParts";
+import { NotAMediaTypeTemplate } from "./NotAMediaType";
+
+const PACKAGE_NAME = packageNameFrom("@ganbarodigital/ts-lib-mediatypes");
+
+type PackageErrorTableIndex<T extends ErrorTable> = ErrorTableTemplateWithNoExtraData<
+    T, string, ExtraDataTemplate | NoExtraDataTemplate
+>;
+
+export class PackageErrorTable implements ErrorTable {
+    [key: string]: PackageErrorTableIndex<PackageErrorTable>;
+
+    public "not-a-media-type": NotAMediaTypeTemplate = {
+        packageName: PACKAGE_NAME,
+        errorName: "not-a-media-type",
+        detail: "the given string does not have the structure of a MediaType",
+        status: httpStatusCodeFrom(422),
+        extra: {
+            public: {
+                input: "the string that failed validation",
+            },
+        },
+    };
+}
+
+export const ERROR_TABLE = new PackageErrorTable();

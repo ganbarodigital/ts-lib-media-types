@@ -80,3 +80,8 @@ export const ValidMediaTypeExamples: MediaTypeExamples = {
         suffix: "json",
     },
 };
+
+export const InvalidMediaTypeExamples = [
+    "text",
+    "text/plain; boundary=123:456",
+];

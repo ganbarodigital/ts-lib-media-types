@@ -31,7 +31,24 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
 
-export * from "./isMediaType";
-export * from "./mustBeMediaType";
-export * from "./MediaTypeParts";
+import { NotAMediaTypeError } from "../Errors";
+import { isMediaType } from "./isMediaType";
+
+/**
+ * Data guarantee. Calls your onError handler if the given input
+ * isn't an RFC-2045 / 6838-compliant MediaType
+ *
+ * @param input
+ *        this string to be validated
+ */
+export function mustBeMediaType(input: string, onError: OnError = THROW_THE_ERROR): void {
+    // do we have a string with the right structure?
+    if (isMediaType(input)) {
+        return;
+    }
+
+    // if we get here, your string failed to validate
+    onError(new NotAMediaTypeError({public: {input}}));
+}

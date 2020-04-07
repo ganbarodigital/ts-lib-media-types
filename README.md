@@ -79,7 +79,47 @@ TBD.
 
 ### mustBeMediaType()
 
-TBD.
+```typescript
+// how to import this into your own code
+import { isMediaType } from "@ganbarodigital/ts-lib-mediatypes/lib/v1";
+
+// types used for parameters
+import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+
+/**
+ * Data guarantee. Calls your onError handler if the given input
+ * isn't an RFC-2045 / 6838-compliant MediaType
+ *
+ * @param input
+ *        this string to be validated
+ */
+export function mustBeMediaType(input: string, onError: OnError = THROW_THE_ERROR): void;
+```
+
+`mustBeMediaType()` is a _data guarantee_. Use it to ensure that the given string has the structure of a RFC-compliant media type.
+
+### NotAMediaType Error
+
+```typescript
+// how to import this into your own code
+import { NotAMediaTypeError } from "@ganbarodigital/ts-lib-mediatypes/lib/v1";
+
+// base class
+import { AppError, AppErrorParams } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+
+// params object structure
+export interface NotAMediaTypeExtraData {
+    public: {
+        input: string;
+    };
+}
+
+export class NotAMediaTypeError extends AppError {
+    public constructor(params: NotAMediaTypeExtraData & AppErrorParams);
+}
+```
+
+`NotAMediaType` is a throwable, structured `Error`. It's thrown whenever a string doesn't have the expected structure of a media type.
 
 ## NPM Scripts
 
