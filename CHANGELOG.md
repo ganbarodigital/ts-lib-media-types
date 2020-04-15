@@ -21,6 +21,10 @@ For each release, changes are grouped under these headings:
 
 The following changes have been completed, and will be included in the next tagged release.
 
+### Fixes
+
+* Added export for `MediaType` value type.
+
 ## v1.0.0
 
 Released Tuesday, 7th April 2020.

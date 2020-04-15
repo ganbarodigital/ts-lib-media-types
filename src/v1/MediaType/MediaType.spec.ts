@@ -34,7 +34,7 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 
-import { MediaType } from "./MediaType";
+import { MediaType } from ".";
 import { InvalidMediaTypeExamples, ValidMediaTypeExamples } from "./MediaTypeExamples.spec";
 
 describe("MediaType", () => {
