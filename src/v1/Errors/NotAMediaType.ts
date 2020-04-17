@@ -34,7 +34,7 @@
 import {
     AppError,
     AppErrorParams,
-    ErrorTableTemplateWithExtraData,
+    ErrorTableTemplate,
     ExtraPublicData,
     StructuredProblemReport,
     StructuredProblemReportDataWithExtraData,
@@ -48,10 +48,9 @@ export interface NotAMediaTypeExtraData extends ExtraPublicData {
     };
 }
 
-export type NotAMediaTypeTemplate = ErrorTableTemplateWithExtraData<
+export type NotAMediaTypeTemplate = ErrorTableTemplate<
     PackageErrorTable,
-    "not-a-media-type",
-    NotAMediaTypeExtraData
+    "not-a-media-type"
 >;
 
 export type NotAMediaTypeData = StructuredProblemReportDataWithExtraData<

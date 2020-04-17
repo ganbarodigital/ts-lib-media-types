@@ -31,12 +31,7 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
-import {
-    ErrorTable,
-    ErrorTableTemplateWithNoExtraData,
-    ExtraDataTemplate,
-    NoExtraDataTemplate,
-} from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+import { ErrorTable, ErrorTableTemplate } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
 import { httpStatusCodeFrom } from "@ganbarodigital/ts-lib-http-types/lib/v1";
 import { packageNameFrom } from "@ganbarodigital/ts-lib-packagename/lib/v1";
 
@@ -45,9 +40,7 @@ import { NotAMediaTypeTemplate } from "./NotAMediaType";
 
 const PACKAGE_NAME = packageNameFrom("@ganbarodigital/ts-lib-mediatypes");
 
-type PackageErrorTableIndex<T extends ErrorTable> = ErrorTableTemplateWithNoExtraData<
-    T, string, ExtraDataTemplate | NoExtraDataTemplate
->;
+type PackageErrorTableIndex<T extends ErrorTable> = ErrorTableTemplate<T, string>;
 
 export class PackageErrorTable implements ErrorTable {
     [key: string]: PackageErrorTableIndex<PackageErrorTable>;
@@ -57,7 +50,6 @@ export class PackageErrorTable implements ErrorTable {
         errorName: "mediatypematchregex-is-broken",
         detail: "the MediaTypeMatchRegex no longer returns the expected named groups",
         status: httpStatusCodeFrom(500),
-        extra: null,
     };
 
     public "not-a-media-type": NotAMediaTypeTemplate = {
@@ -65,11 +57,6 @@ export class PackageErrorTable implements ErrorTable {
         errorName: "not-a-media-type",
         detail: "the given string does not have the structure of a MediaType",
         status: httpStatusCodeFrom(422),
-        extra: {
-            public: {
-                input: "the string that failed validation",
-            },
-        },
     };
 }
 
