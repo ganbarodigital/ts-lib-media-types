@@ -34,7 +34,7 @@
 import {
     AppError,
     AppErrorParams,
-    ErrorTableTemplateWithNoExtraData,
+    ErrorTableTemplate,
     NoExtraDataTemplate,
     StructuredProblemReport,
     StructuredProblemReportDataWithNoExtraData,
@@ -42,10 +42,9 @@ import {
 
 import { ERROR_TABLE, PackageErrorTable } from "./PackageErrorTable";
 
-export type MediaTypeMatchRegexIsBrokenTemplate = ErrorTableTemplateWithNoExtraData<
+export type MediaTypeMatchRegexIsBrokenTemplate = ErrorTableTemplate<
     PackageErrorTable,
-    "mediatypematchregex-is-broken",
-    NoExtraDataTemplate
+    "mediatypematchregex-is-broken"
 >;
 
 export type MediaTypeMatchRegexIsBrokenData = StructuredProblemReportDataWithNoExtraData<
