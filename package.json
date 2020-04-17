@@ -31,16 +31,16 @@
     "@ganbarodigital/ts-lib-value-objects": "^1.1.4"
   },
   "devDependencies": {
-    "@types/node": "^13.1.2",
-    "tslint": "^5.20.1",
-    "typescript": "^3.8.0",
     "@types/chai": "^4.2.8",
     "@types/mocha": "^7.0.1",
+    "@types/node": "^13.11.1",
     "chai": "^4.2.0",
     "chai-bytes": "^0.1.2",
     "mocha": "^7.0.1",
     "nyc": "^15.0.0",
     "rimraf": "^3.0.0",
-    "ts-node": "^8.0.0"
+    "ts-node": "^8.0.0",
+    "tslint": "^5.20.1",
+    "typescript": "^3.8.0"
   }
 }
