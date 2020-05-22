@@ -82,11 +82,11 @@ export class MediaType extends RefinedString {
     /**
      * returns a breakdown of the individual components for this media type
      */
-    public parse(onError: OnError = THROW_THE_ERROR): MediaTypeParts {
+    public parse(): MediaTypeParts {
         // haven't we already done this?
         if (!this.#parsed) {
             // no, first time for everything!
-            this.#parsed = parseMediaType(this.value, onError);
+            this.#parsed = parseMediaType(this.value, THROW_THE_ERROR);
         }
 
         // return our cached value

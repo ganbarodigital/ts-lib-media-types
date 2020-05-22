@@ -35,6 +35,12 @@ The following changes have been completed, and will be included in the next tagg
 * `parseMediaType()` (and `MediaType.parse()`)
   - converts everything *except* parameter values to lower-case
 
+### Refactor
+
+* `MediaType.parse()`
+  - drop the unused `onError` parameter
+    - it was impossible for `onError` to ever be called
+
 ### Dependencies
 
 * Upgraded to TypeScript 3.9

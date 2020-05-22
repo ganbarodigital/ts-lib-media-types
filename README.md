@@ -66,7 +66,7 @@ export class MediaType extends RefinedString {
     /**
      * returns a breakdown of the individual components for this media type
      */
-    public parse(onError: OnError = THROW_THE_ERROR): MediaTypeParts;
+    public parse(): MediaTypeParts;
 }
 ```
 
