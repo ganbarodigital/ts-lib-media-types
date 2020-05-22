@@ -37,6 +37,10 @@ export interface MediaTypeExamples {
     [mediaType: string]: MediaTypeParts;
 }
 
+export interface ContentTypeExamples {
+    [mediaType: string]: string;
+}
+
 export const ValidMediaTypeExamples: MediaTypeExamples = {
     "text/plain": {
         type: "text",
@@ -85,3 +89,13 @@ export const InvalidMediaTypeExamples = [
     "text",
     "text/plain; boundary=123:456",
 ];
+
+export const ValidContentTypeExamples: ContentTypeExamples = {
+    "text/plain": "text/plain",
+    "text/plain; charset=us-ascii": "text/plain",
+    'text/plain; charset="us-ascii"': "text/plain",
+    "text/plain; charset=ISO-8859-1": "text/plain",
+    "application/vnd.record": "application/vnd.record",
+    "application/vnd.tie-record": "application/vnd.tie-record",
+    "application/vnd.tie-record+json": "application/vnd.tie-record+json",
+};

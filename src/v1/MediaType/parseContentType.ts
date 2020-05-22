@@ -31,17 +31,47 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
-import { expect } from "chai";
-import { describe } from "mocha";
+import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
 
-import { MediaTypeMatchRegexIsBrokenError } from ".";
+import { NotAMediaTypeError } from "../Errors";
+import { MediaTypeMatchRegexIsBrokenError } from "../Errors/MediaTypeMatchRegexIsBroken";
+import { MediaTypeMatchRegex } from "./regexes";
 
-describe("MediaTypeMatchRegexIsBrokenError", () => {
-    describe(".constructor()", () => {
-        it("creates a Javascript error", () => {
-            const unit = new MediaTypeMatchRegexIsBrokenError({});
+type CaseConverter = (input: string) => string;
 
-            expect(unit).to.be.instanceOf(Error);
-        });
-    });
-});
+/**
+ * Data parser. Extracts everything but the parameters from an RFC-compliant
+ * MediaType, and returns it as a single string.
+ *
+ * The result is returned as a lower-case string.
+ */
+export const parseContentType = parseContentTypeUnbound.bind(
+    null,
+    MediaTypeMatchRegex,
+);
+
+/**
+ * Data parser. Extracts everything but the parameters from an RFC-compliant
+ * MediaType, and returns it as a single string.
+ *
+ * The result is run through the `caseConverter` function.
+ */
+export function parseContentTypeUnbound(
+    matchRegex: RegExp,
+    input: string,
+    onError: OnError = THROW_THE_ERROR,
+    caseConverter: CaseConverter = (x) => x.toLocaleLowerCase(),
+): string {
+    const regResult = matchRegex.exec(input);
+    if (regResult === null) {
+        throw onError(new NotAMediaTypeError({public: {input}}));
+    }
+
+    // special case - the regex has no named groups in it any more
+    // this code is unreachable for testing purposes :(
+    if (regResult.groups === undefined) {
+        throw onError(new MediaTypeMatchRegexIsBrokenError({}));
+    }
+
+    return caseConverter(regResult.groups.contentType);
+}

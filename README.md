@@ -10,6 +10,7 @@ This TypeScript library provides a `MediaType` _value type_ that validates and s
   - [MediaType Value Type](#mediatype-value-type)
   - [MediaTypeParts Value Type](#mediatypeparts-value-type)
   - [isMediaType()](#ismediatype)
+  - [parseContentType()](#parsecontenttype)
   - [parseMediaType()](#parsemediatype)
   - [mustBeMediaType()](#mustbemediatype)
   - [MediaTypeMatchRegexIsBrokenError](#mediatypematchregexisbrokenerror)
@@ -58,9 +59,14 @@ export class MediaType extends RefinedString {
     public constructor(input: string, onError: OnError = THROW_THE_ERROR);
 
     /**
+     * Gets the 'text/html' bit from 'text/html; charset=UTF-8' (for example)
+     */
+    public getContentType(): string;
+
+    /**
      * returns a breakdown of the individual components for this media type
      */
-    public parse(onError: OnError = THROW_THE_ERROR): MediaTypeParts;
+    public parse(): MediaTypeParts;
 }
 ```
 
@@ -98,18 +104,47 @@ const myMediaType = new MediaType("text");
 // how to import this into your own code
 import { MediaTypeParts } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
 
+/**
+ * the structure of a MediaType
+ *
+ * call parseMediaType() or MediaType.parse() to get your MediaType
+ * broken down
+ */
 export interface MediaTypeParts {
+    /**
+     * the 'text' in 'text/html' - everything before the first '/'
+     */
     type: string;
+
+    /**
+     * the 'vnd' in 'application/vnd.ms-excel' - everything after
+     * the first '/' and before the first '.'
+     */
     tree?: string;
+
+    /**
+     * the 'html' in 'text/html',
+     * or the 'ms-excel' in 'application/vnd.ms-excel'
+     *
+     * - everything after the 'type' and the 'tree'
+     */
     subtype: string;
+
+    /**
+     * the 'json' in 'application/vnd.ms-excel+json'
+     */
     suffix?: string;
+
+    /**
+     * any parameters tacked onto the end of the media type
+     */
     parameters?: {[parameter: string]: string};
 }
 ```
 
-`MediaTypeParts` is a _value type_. It contains the parsed contents of a MediaType.
+`MediaTypeParts` is a _value type_. It contains the parsed contents of a MediaType. The attribute names come from [RFC 2045][RFC 2045].
 
-There are two ways to get one:
+There are two ways to get a `MediaTypesParts` value:
 
 * call [`parseMediaType()`](#parsemediatype) to get a `MediaTypeParts` object from a string, or
 * call `MediaType.parse()`
@@ -145,6 +180,33 @@ export function isMediaType(input: string): boolean;
 
     type "/" [tree "."] subtype ["+" suffix] *[";" parameter]
 
+### parseContentType()
+
+```typescript
+// how to import this into your own code
+import { parseContentType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+// types used for parameters
+import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+
+/**
+ * Data parser. Extracts everything but the parameters from an RFC-compliant
+ * MediaType, and returns it as a single string.
+ *
+ * The result is returned as a lower-case string.
+ */
+export function parseContentType(
+    input: string,
+    onError: OnError = THROW_THE_ERROR,
+): string;
+```
+
+`parseContentType()` is a _data parser_. Use it to extract the `text/html` section from `text/html; charset=UTF-8` (for example).
+
+NOTE that `parseContentType()` always returns a lower-case string.
+
+If you need to preserve the case of the result string, have a look at our undocumented `parseContentTypeUnbound()` function.
+
 ### parseMediaType()
 
 ```typescript
@@ -165,6 +227,10 @@ export function parseMediaType(
 ```
 
 `parseMediaType()` is a _data parser_. Use it to break down the contents of a media type into its individual parts.
+
+NOTE that `parseMediaType()` converts everything except parameter values to lower-case.
+
+If you need to preserve the case of all the parts, have a look at our undocumented `parseMediaTypeUnbound()` function.
 
 ### mustBeMediaType()
 

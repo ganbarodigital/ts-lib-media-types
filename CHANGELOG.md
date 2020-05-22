@@ -21,6 +21,34 @@ For each release, changes are grouped under these headings:
 
 The following changes have been completed, and will be included in the next tagged release.
 
+## v1.1.0
+
+Released Friday, 22nd May 2020.
+
+### New
+
+* `MediaType.parse()`
+  - we now cache the first `parse()` result, to speed up any subsequent calls to `parse()`
+* `MediaTypeMatchRegex`
+  - added result group `contentType`
+* `parseContentType()` added
+  - extracts everything before the parameters in the MediaType string
+
+### Fixes
+
+* `parseMediaType()` (and `MediaType.parse()`)
+  - converts everything *except* parameter values to lower-case
+
+### Refactor
+
+* `MediaType.parse()`
+  - drop the unused `onError` parameter
+    - it was impossible for `onError` to ever be called
+
+### Dependencies
+
+* Upgraded to TypeScript 3.9
+
 ## v1.0.2
 
 Released Friday, 17th April 2020.

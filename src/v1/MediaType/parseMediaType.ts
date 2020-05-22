@@ -38,22 +38,33 @@ import { MediaTypeMatchRegexIsBrokenError } from "../Errors/MediaTypeMatchRegexI
 import { MediaTypeParts } from "./MediaTypeParts";
 import { MediaTypeMatchRegex, MediaTypeParamRegex } from "./regexes";
 
-/**
- * Data parser. Breaks down an RFC-compliant MediaType into its
- * individual parts.
- */
-export const parseMediaType =
-    parseMediaTypeWithParsers.bind(null, MediaTypeMatchRegex, MediaTypeParamRegex);
+export type CaseConverter = (input: string) => string;
 
 /**
  * Data parser. Breaks down an RFC-compliant MediaType into its
  * individual parts.
+ *
+ * Everything except parameter values are returned as lower-case strings.
  */
-export function parseMediaTypeWithParsers(
+export const parseMediaType = parseMediaTypeUnbound.bind(
+    null,
+    MediaTypeMatchRegex,
+    MediaTypeParamRegex,
+);
+
+/**
+ * Data parser. Breaks down an RFC-compliant MediaType into its
+ * individual parts.
+ *
+ * Everything except parameter values are run through the `caseConverter`
+ * function.
+ */
+export function parseMediaTypeUnbound(
     matchRegex: RegExp,
     paramRegex: RegExp,
     input: string,
     onError: OnError = THROW_THE_ERROR,
+    caseConverter: CaseConverter = (x) => x.toLocaleLowerCase(),
 ): MediaTypeParts {
     const regResult = matchRegex.exec(input);
     if (regResult === null) {
@@ -68,16 +79,16 @@ export function parseMediaTypeWithParsers(
 
     // these are mandatory
     const retval: MediaTypeParts = {
-        type: regResult.groups.type,
-        subtype: regResult.groups.subtype,
+        type: caseConverter(regResult.groups.type),
+        subtype: caseConverter(regResult.groups.subtype),
     };
 
     // these are optional
-    if (regResult.groups.tree !== undefined) {
-        retval.tree = regResult.groups.tree;
+    if (regResult.groups.tree) {
+        retval.tree = caseConverter(regResult.groups.tree);
     }
-    if (regResult.groups.suffix !== undefined) {
-        retval.suffix = regResult.groups.suffix;
+    if (regResult.groups.suffix) {
+        retval.suffix = caseConverter(regResult.groups.suffix);
     }
 
     // and these are special ...
@@ -87,12 +98,14 @@ export function parseMediaTypeWithParsers(
         retval.parameters = {};
 
         while (paramResult !== null && paramResult.groups !== undefined) {
-            retval.parameters[paramResult.groups.parameterName]
-            = paramResult.groups.parameterValueA || paramResult.groups.parameterValueB;
+            const paramName = caseConverter(paramResult.groups.parameterName);
+            retval.parameters[paramName]
+                = paramResult.groups.parameterValueA || paramResult.groups.parameterValueB;
 
             paramResult = paramRegex.exec(input);
         }
     }
 
+    // all done
     return retval;
 }
