@@ -81,7 +81,6 @@ export function parseMediaTypeUnbound(
     const retval: MediaTypeParts = {
         type: caseConverter(regResult.groups.type),
         subtype: caseConverter(regResult.groups.subtype),
-        sansParameters: caseConverter(regResult.groups.sansParameters),
     };
 
     // these are optional

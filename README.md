@@ -10,6 +10,7 @@ This TypeScript library provides a `MediaType` _value type_ that validates and s
   - [MediaType Value Type](#mediatype-value-type)
   - [MediaTypeParts Value Type](#mediatypeparts-value-type)
   - [isMediaType()](#ismediatype)
+  - [parseContentType()](#parsecontenttype)
   - [parseMediaType()](#parsemediatype)
   - [mustBeMediaType()](#mustbemediatype)
   - [MediaTypeMatchRegexIsBrokenError](#mediatypematchregexisbrokenerror)
@@ -106,13 +107,6 @@ import { MediaTypeParts } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
  */
 export interface MediaTypeParts {
     /**
-     * everything but the parameters, in one string.
-     *
-     * Handy for comparing two MediaTypes.
-     */
-    sansParameters: string;
-
-    /**
      * the 'text' in 'text/html' - everything before the first '/'
      */
     type: string;
@@ -143,9 +137,7 @@ export interface MediaTypeParts {
 }
 ```
 
-`MediaTypeParts` is a _value type_. It contains the parsed contents of a MediaType.
-
-The majority of the attribute names come from [RFC 2045][RFC 2045]. We've also added the `.sansParameters` attribute, to make it easier to compare two MediaTypes to each other.
+`MediaTypeParts` is a _value type_. It contains the parsed contents of a MediaType. The attribute names come from [RFC 2045][RFC 2045].
 
 There are two ways to get a `MediaTypesParts` value:
 
@@ -182,6 +174,33 @@ export function isMediaType(input: string): boolean;
 `isMediaType()` is a _data guard_. Use it to prove that a string contains something with the structure of a MediaType:
 
     type "/" [tree "."] subtype ["+" suffix] *[";" parameter]
+
+### parseContentType()
+
+```typescript
+// how to import this into your own code
+import { parseContentType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+// types used for parameters
+import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+
+/**
+ * Data parser. Extracts everything but the parameters from an RFC-compliant
+ * MediaType, and returns it as a single string.
+ *
+ * The result is returned as a lower-case string.
+ */
+export function parseContentType(
+    input: string,
+    onError: OnError = THROW_THE_ERROR,
+): string;
+```
+
+`parseContentType()` is a _data parser_. Use it to extract the `text/html` section from `text/html; charset=UTF-8` (for example).
+
+NOTE that `parseContentType()` always returns a lower-case string.
+
+If you need to preserve the case of the result string, have a look at our undocumented `parseContentTypeUnbound()` function.
 
 ### parseMediaType()
 

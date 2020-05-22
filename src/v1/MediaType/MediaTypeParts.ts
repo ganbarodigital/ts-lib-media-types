@@ -40,13 +40,6 @@
  */
 export interface MediaTypeParts {
     /**
-     * everything but the parameters, in one string.
-     *
-     * Handy for comparing two MediaTypes.
-     */
-    sansParameters: string;
-
-    /**
      * the 'text' in 'text/html' - everything before the first '/'
      */
     type: string;

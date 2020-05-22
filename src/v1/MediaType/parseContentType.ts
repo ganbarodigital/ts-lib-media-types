@@ -31,9 +31,47 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
 
-// tslint:disable-next-line: max-line-length
-export const MediaTypeMatchRegex = /^(?<contentType>(?<type>[A-Za-z0-9][-\w!#$&^]*)\/((?<tree>[A-Za-z0-9][\w\d-!#$&^]*)\.){0,1}(?<subtype>[A-Za-z0-9][\w\d-!#$&^]+)(\+(?<suffix>[\w\d]+)){0,1})(;[\s]+(?<parameter>[\w\d]+=([\w\d-!#$&^]+|"[^"]*\")))*$/;
+import { NotAMediaTypeError } from "../Errors";
+import { MediaTypeMatchRegexIsBrokenError } from "../Errors/MediaTypeMatchRegexIsBroken";
+import { MediaTypeMatchRegex } from "./regexes";
 
-// tslint:disable-next-line: max-line-length
-export const MediaTypeParamRegex = /(;[\s]+((?<parameterName>[\w\d]+)=((?<parameterValueA>[\w\d-!#$&^]+)|"(?<parameterValueB>[^"]*)")))/g;
+type CaseConverter = (input: string) => string;
+
+/**
+ * Data parser. Extracts everything but the parameters from an RFC-compliant
+ * MediaType, and returns it as a single string.
+ *
+ * The result is returned as a lower-case string.
+ */
+export const parseContentType = parseContentTypeUnbound.bind(
+    null,
+    MediaTypeMatchRegex,
+);
+
+/**
+ * Data parser. Extracts everything but the parameters from an RFC-compliant
+ * MediaType, and returns it as a single string.
+ *
+ * The result is run through the `caseConverter` function.
+ */
+export function parseContentTypeUnbound(
+    matchRegex: RegExp,
+    input: string,
+    onError: OnError = THROW_THE_ERROR,
+    caseConverter: CaseConverter = (x) => x.toLocaleLowerCase(),
+): string {
+    const regResult = matchRegex.exec(input);
+    if (regResult === null) {
+        throw onError(new NotAMediaTypeError({public: {input}}));
+    }
+
+    // special case - the regex has no named groups in it any more
+    // this code is unreachable for testing purposes :(
+    if (regResult.groups === undefined) {
+        throw onError(new MediaTypeMatchRegexIsBrokenError({}));
+    }
+
+    return caseConverter(regResult.groups.contentType);
+}

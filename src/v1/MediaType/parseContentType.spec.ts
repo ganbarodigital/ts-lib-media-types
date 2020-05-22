@@ -31,9 +31,38 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import { expect } from "chai";
+import { describe } from "mocha";
 
-// tslint:disable-next-line: max-line-length
-export const MediaTypeMatchRegex = /^(?<contentType>(?<type>[A-Za-z0-9][-\w!#$&^]*)\/((?<tree>[A-Za-z0-9][\w\d-!#$&^]*)\.){0,1}(?<subtype>[A-Za-z0-9][\w\d-!#$&^]+)(\+(?<suffix>[\w\d]+)){0,1})(;[\s]+(?<parameter>[\w\d]+=([\w\d-!#$&^]+|"[^"]*\")))*$/;
+import { MediaTypeMatchRegexIsBrokenError } from "../Errors/MediaTypeMatchRegexIsBroken";
+import { InvalidMediaTypeExamples, ValidContentTypeExamples } from "./MediaTypeExamples.spec";
+import { parseContentType, parseContentTypeUnbound } from "./parseContentType";
 
-// tslint:disable-next-line: max-line-length
-export const MediaTypeParamRegex = /(;[\s]+((?<parameterName>[\w\d]+)=((?<parameterValueA>[\w\d-!#$&^]+)|"(?<parameterValueB>[^"]*)")))/g;
+// a valid regex, that doesn't populate named groups
+const BrokenMatchRegex = /^.*$/;
+
+describe("parseContentType()", () => {
+    // tslint:disable-next-line: forin
+    for (const inputValue in ValidContentTypeExamples) {
+        it("correctly parses '" + inputValue + '"', () => {
+            const expectedValue = ValidContentTypeExamples[inputValue];
+            const actualValue = parseContentType(inputValue);
+
+            expect(actualValue).to.equal(expectedValue);
+        });
+    }
+
+    for (const inputValue of InvalidMediaTypeExamples) {
+        it("rejects example '" + inputValue + "'", () => {
+            expect(() => parseContentType(inputValue)).to.throw();
+        });
+    }
+
+    it("throws MediaTypeMatchRegexIsBrokenError if we use a garbage parser", () => {
+        const inputValue = "text/plain";
+        expect(() => parseContentTypeUnbound(
+            BrokenMatchRegex,
+            inputValue,
+        )).to.throw(MediaTypeMatchRegexIsBrokenError);
+    });
+});

@@ -25,13 +25,10 @@ The following changes have been completed, and will be included in the next tagg
 
 * `MediaType.parse()`
   - we now cache the first `parse()` result, to speed up any subsequent calls to `parse()`
-  - populates the new `MediaTypeParts.sansParameters` attribute
 * `MediaTypeMatchRegex`
-  - added result group `sansParameters`
-* `MediaTypeParts`
-  - new member `.sansParameters`, which captures all of the media type before the optional parameters. Helps for equality testing between two MediaTypes.
-* `parseMediaType()`
-  - populates the new `MediaTypeParts.sansParameters` attribute
+  - added result group `contentType`
+* `parseContentType()` added
+  - extracts everything before the parameters in the MediaType string
 
 ### Fixes
 
