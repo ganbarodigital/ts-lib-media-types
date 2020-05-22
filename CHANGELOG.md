@@ -35,6 +35,10 @@ The following changes have been completed, and will be included in the next tagg
 * `parseMediaType()` (and `MediaType.parse()`)
   - converts everything *except* parameter values to lower-case
 
+### Dependencies
+
+* Upgraded to TypeScript 3.9
+
 ## v1.0.2
 
 Released Friday, 17th April 2020.

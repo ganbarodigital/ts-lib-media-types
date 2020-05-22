@@ -59,6 +59,11 @@ export class MediaType extends RefinedString {
     public constructor(input: string, onError: OnError = THROW_THE_ERROR);
 
     /**
+     * Gets the 'text/html' bit from 'text/html; charset=UTF-8' (for example)
+     */
+    public getContentType(): string;
+
+    /**
      * returns a breakdown of the individual components for this media type
      */
     public parse(onError: OnError = THROW_THE_ERROR): MediaTypeParts;

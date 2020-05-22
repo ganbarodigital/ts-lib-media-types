@@ -35,7 +35,11 @@ import { expect } from "chai";
 import { describe } from "mocha";
 
 import { MediaType } from ".";
-import { InvalidMediaTypeExamples, ValidMediaTypeExamples } from "./MediaTypeExamples.spec";
+import {
+    InvalidMediaTypeExamples,
+    ValidContentTypeExamples,
+    ValidMediaTypeExamples,
+} from "./MediaTypeExamples.spec";
 
 describe("MediaType", () => {
     describe("constructor()", () => {
@@ -53,6 +57,27 @@ describe("MediaType", () => {
                 expect(() => new MediaType(inputValue)).to.throw();
             });
         }
+    });
+
+    describe(".getContentType()", () => {
+        // tslint:disable-next-line: forin
+        for (const inputValue in ValidContentTypeExamples) {
+            it("correctly parses '" + inputValue + '"', () => {
+                const expectedValue = ValidContentTypeExamples[inputValue];
+                const unit = new MediaType(inputValue);
+
+                const actualValue = unit.getContentType();
+                expect(actualValue).to.eql(expectedValue);
+            });
+        }
+
+        it("returns the same value when called multiple times", () => {
+            const unit = new MediaType("application/vnd.tie-record+json");
+
+            const actualValue1 = unit.getContentType();
+            const actualValue2 = unit.getContentType();
+            expect(actualValue1).to.equal(actualValue2);
+        });
     });
 
     describe(".parse()", () => {

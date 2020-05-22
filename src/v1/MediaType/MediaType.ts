@@ -36,12 +36,19 @@ import { RefinedString } from "@ganbarodigital/ts-lib-value-objects/lib/v2";
 
 import { MediaTypeParts } from "./MediaTypeParts";
 import { mustBeMediaType } from "./mustBeMediaType";
+import { parseContentType } from "./parseContentType";
 import { parseMediaType } from "./parseMediaType";
 
 /**
  * value type. Represents RFC-compliant media type strings.
  */
 export class MediaType extends RefinedString {
+    /**
+     * internal cache. Stops us having to extract the content type
+     * from our value more than once
+     */
+    #contentType: string|undefined = undefined;
+
     /**
      * internal cache. Stops us having to parse our value
      * more than once.
@@ -56,6 +63,20 @@ export class MediaType extends RefinedString {
      */
     public constructor(input: string, onError: OnError = THROW_THE_ERROR) {
         super(input, mustBeMediaType, onError);
+    }
+
+    /**
+     * Gets the 'text/html' bit from 'text/html; charset=UTF-8' (for example)
+     */
+    public getContentType(): string {
+        // haven't we already done this?
+        if (!this.#contentType) {
+            // no, first time for everything!
+            this.#contentType = parseContentType(this.value, THROW_THE_ERROR);
+        }
+
+        // return our cached value
+        return this.#contentType;
     }
 
     /**
