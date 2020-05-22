@@ -98,19 +98,56 @@ const myMediaType = new MediaType("text");
 // how to import this into your own code
 import { MediaTypeParts } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
 
+/**
+ * the structure of a MediaType
+ *
+ * call parseMediaType() or MediaType.parse() to get your MediaType
+ * broken down
+ */
 export interface MediaTypeParts {
-    type: string;
-    tree?: string;
-    subtype: string;
-    suffix?: string;
-    parameters?: {[parameter: string]: string};
+    /**
+     * everything but the parameters, in one string.
+     *
+     * Handy for comparing two MediaTypes.
+     */
     sansParameters: string;
+
+    /**
+     * the 'text' in 'text/html' - everything before the first '/'
+     */
+    type: string;
+
+    /**
+     * the 'vnd' in 'application/vnd.ms-excel' - everything after
+     * the first '/' and before the first '.'
+     */
+    tree?: string;
+
+    /**
+     * the 'html' in 'text/html',
+     * or the 'ms-excel' in 'application/vnd.ms-excel'
+     *
+     * - everything after the 'type' and the 'tree'
+     */
+    subtype: string;
+
+    /**
+     * the 'json' in 'application/vnd.ms-excel+json'
+     */
+    suffix?: string;
+
+    /**
+     * any parameters tacked onto the end of the media type
+     */
+    parameters?: {[parameter: string]: string};
 }
 ```
 
 `MediaTypeParts` is a _value type_. It contains the parsed contents of a MediaType.
 
-There are two ways to get one:
+The majority of the attribute names come from [RFC 2045][RFC 2045]. We've also added the `.sansParameters` attribute, to make it easier to compare two MediaTypes to each other.
+
+There are two ways to get a `MediaTypesParts` value:
 
 * call [`parseMediaType()`](#parsemediatype) to get a `MediaTypeParts` object from a string, or
 * call `MediaType.parse()`

@@ -35,13 +35,43 @@
 /**
  * the structure of a MediaType
  *
- * call parseMediaType() to get your MediaType broken down
+ * call parseMediaType() or MediaType.parse() to get your MediaType
+ * broken down
  */
 export interface MediaTypeParts {
-    type: string;
-    tree?: string;
-    subtype: string;
-    suffix?: string;
-    parameters?: {[parameter: string]: string};
+    /**
+     * everything but the parameters, in one string.
+     *
+     * Handy for comparing two MediaTypes.
+     */
     sansParameters: string;
+
+    /**
+     * the 'text' in 'text/html' - everything before the first '/'
+     */
+    type: string;
+
+    /**
+     * the 'vnd' in 'application/vnd.ms-excel' - everything after
+     * the first '/' and before the first '.'
+     */
+    tree?: string;
+
+    /**
+     * the 'html' in 'text/html',
+     * or the 'ms-excel' in 'application/vnd.ms-excel'
+     *
+     * - everything after the 'type' and the 'tree'
+     */
+    subtype: string;
+
+    /**
+     * the 'json' in 'application/vnd.ms-excel+json'
+     */
+    suffix?: string;
+
+    /**
+     * any parameters tacked onto the end of the media type
+     */
+    parameters?: {[parameter: string]: string};
 }
