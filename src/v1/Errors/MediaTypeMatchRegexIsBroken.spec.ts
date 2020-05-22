@@ -34,7 +34,7 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 
-import { MediaTypeMatchRegexIsBrokenError } from "./MediaTypeMatchRegexIsBroken";
+import { MediaTypeMatchRegexIsBrokenError } from ".";
 
 describe("MediaTypeMatchRegexIsBrokenError", () => {
     describe(".constructor()", () => {

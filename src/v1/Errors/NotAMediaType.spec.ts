@@ -34,7 +34,7 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 
-import { NotAMediaTypeError } from "./NotAMediaType";
+import { NotAMediaTypeError } from ".";
 
 describe("NotAMediaTypeError", () => {
     describe(".constructor()", () => {
