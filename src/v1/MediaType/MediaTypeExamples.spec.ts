@@ -41,10 +41,12 @@ export const ValidMediaTypeExamples: MediaTypeExamples = {
     "text/plain": {
         type: "text",
         subtype: "plain",
+        sansParameters: "text/plain",
     },
     "text/plain; charset=us-ascii": {
         type: "text",
         subtype: "plain",
+        sansParameters: "text/plain",
         parameters: {
             charset: "us-ascii",
         },
@@ -52,6 +54,7 @@ export const ValidMediaTypeExamples: MediaTypeExamples = {
     'text/plain; charset="us-ascii"': {
         type: "text",
         subtype: "plain",
+        sansParameters: "text/plain",
         parameters: {
             charset: "us-ascii",
         },
@@ -59,6 +62,7 @@ export const ValidMediaTypeExamples: MediaTypeExamples = {
     "text/plain; charset=ISO-8859-1": {
         type: "text",
         subtype: "plain",
+        sansParameters: "text/plain",
         parameters: {
             charset: "ISO-8859-1",
         },
@@ -67,17 +71,20 @@ export const ValidMediaTypeExamples: MediaTypeExamples = {
         type: "application",
         tree: "vnd",
         subtype: "record",
+        sansParameters: "application/vnd.record",
     },
     "application/vnd.tie-record": {
         type: "application",
         tree: "vnd",
         subtype: "tie-record",
+        sansParameters: "application/vnd.tie-record",
     },
     "application/vnd.tie-record+json": {
         type: "application",
         tree: "vnd",
         subtype: "tie-record",
         suffix: "json",
+        sansParameters: "application/vnd.tie-record+json",
     },
 };
 

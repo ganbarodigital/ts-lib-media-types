@@ -70,6 +70,7 @@ export function parseMediaTypeWithParsers(
     const retval: MediaTypeParts = {
         type: regResult.groups.type,
         subtype: regResult.groups.subtype,
+        sansParameters: regResult.groups.sansParameters,
     };
 
     // these are optional

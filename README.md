@@ -104,6 +104,7 @@ export interface MediaTypeParts {
     subtype: string;
     suffix?: string;
     parameters?: {[parameter: string]: string};
+    sansParameters: string;
 }
 ```
 
