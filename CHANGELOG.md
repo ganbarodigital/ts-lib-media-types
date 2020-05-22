@@ -33,6 +33,11 @@ The following changes have been completed, and will be included in the next tagg
 * `parseMediaType()`
   - populates the new `MediaTypeParts.sansParameters` attribute
 
+### Fixes
+
+* `parseMediaType()` (and `MediaType.parse()`)
+  - converts everything *except* parameter values to lower-case
+
 ## v1.0.2
 
 Released Friday, 17th April 2020.

@@ -204,6 +204,10 @@ export function parseMediaType(
 
 `parseMediaType()` is a _data parser_. Use it to break down the contents of a media type into its individual parts.
 
+NOTE that `parseMediaType()` converts everything except parameter values to lower-case.
+
+If you need to preserve the case of all the parts, have a look at our undocumented `parseMediaTypeUnbound()` function.
+
 ### mustBeMediaType()
 
 ```typescript

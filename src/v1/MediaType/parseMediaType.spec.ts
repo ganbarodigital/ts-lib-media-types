@@ -36,7 +36,7 @@ import { describe } from "mocha";
 
 import { MediaTypeMatchRegexIsBrokenError } from "../Errors/MediaTypeMatchRegexIsBroken";
 import { InvalidMediaTypeExamples, ValidMediaTypeExamples } from "./MediaTypeExamples.spec";
-import { parseMediaType, parseMediaTypeWithParsers } from "./parseMediaType";
+import { parseMediaType, parseMediaTypeUnbound } from "./parseMediaType";
 import { MediaTypeParamRegex } from "./regexes";
 
 // a valid regex, that doesn't populate named groups
@@ -61,7 +61,7 @@ describe("parseMediaType()", () => {
 
     it("throws MediaTypeMatchRegexIsBrokenError if we use a garbage parser", () => {
         const inputValue = "text/plain";
-        expect(() => parseMediaTypeWithParsers(
+        expect(() => parseMediaTypeUnbound(
             BrokenMatchRegex,
             MediaTypeParamRegex,
             inputValue,
