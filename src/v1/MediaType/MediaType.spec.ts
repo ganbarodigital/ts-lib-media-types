@@ -66,6 +66,14 @@ describe("MediaType", () => {
                 expect(actualValue).to.eql(expectedValue);
             });
         }
+
+        it("returns the same value when called multiple times", () => {
+            const unit = new MediaType("application/vnd.tie-record+json");
+
+            const actualValue1 = unit.parse();
+            const actualValue2 = unit.parse();
+            expect(actualValue1).to.equal(actualValue2);
+        });
     });
 
     it("can be used as a string", () => {

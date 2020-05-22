@@ -21,6 +21,11 @@ For each release, changes are grouped under these headings:
 
 The following changes have been completed, and will be included in the next tagged release.
 
+### New
+
+* `MediaType.parse()`
+  - we now cache the first `parse()` result, to speed up any subsequent calls to `parse()`
+
 ## v1.0.2
 
 Released Friday, 17th April 2020.

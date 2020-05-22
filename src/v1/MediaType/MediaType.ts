@@ -43,6 +43,12 @@ import { parseMediaType } from "./parseMediaType";
  */
 export class MediaType extends RefinedString {
     /**
+     * internal cache. Stops us having to parse our value
+     * more than once.
+     */
+    private parsed: MediaTypeParts|undefined = undefined;
+
+    /**
      * smart constructor.
      *
      * calls your `onError` handler if `input` isn't a well-formatted
@@ -56,6 +62,13 @@ export class MediaType extends RefinedString {
      * returns a breakdown of the individual components for this media type
      */
     public parse(onError: OnError = THROW_THE_ERROR): MediaTypeParts {
-        return parseMediaType(this.value, onError);
+        // haven't we already done this?
+        if (!this.parsed) {
+            // no, first time for everything!
+            this.parsed = parseMediaType(this.value, onError);
+        }
+
+        // return our cached value
+        return this.parsed;
     }
 }
