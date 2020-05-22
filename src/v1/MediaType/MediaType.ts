@@ -53,7 +53,7 @@ export class MediaType extends RefinedString {
      * internal cache. Stops us having to parse our value
      * more than once.
      */
-    private parsed: MediaTypeParts|undefined = undefined;
+    #parsed: MediaTypeParts|undefined = undefined;
 
     /**
      * smart constructor.
@@ -84,12 +84,12 @@ export class MediaType extends RefinedString {
      */
     public parse(onError: OnError = THROW_THE_ERROR): MediaTypeParts {
         // haven't we already done this?
-        if (!this.parsed) {
+        if (!this.#parsed) {
             // no, first time for everything!
-            this.parsed = parseMediaType(this.value, onError);
+            this.#parsed = parseMediaType(this.value, onError);
         }
 
         // return our cached value
-        return this.parsed;
+        return this.#parsed;
     }
 }
