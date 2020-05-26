@@ -14,6 +14,7 @@ This TypeScript library provides a `MediaType` _value type_ that validates and s
   - [parseContentType()](#parsecontenttype)
   - [parseMediaType()](#parsemediatype)
   - [mustBeMediaType()](#mustbemediatype)
+  - [mustMatchContentType()](#mustmatchcontenttype)
   - [MediaTypeMatchRegexIsBrokenError](#mediatypematchregexisbrokenerror)
   - [NotAMediaTypeError](#notamediatypeerror)
   - [UnexpectedContentTypeError](#unexpectedcontenttypeerror)
@@ -281,6 +282,31 @@ export function mustBeMediaType(input: string, onError: OnError = THROW_THE_ERRO
 ```
 
 `mustBeMediaType()` is a _data guarantee_. Use it to ensure that the given string has the structure of a RFC-compliant media type.
+
+### mustMatchContentType()
+
+```typescript
+// how to import this into your own code
+import { mustMatchContentType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+// types used for parameters
+import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+import { MediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+/**
+ * Data guarantee. Calls your onError handler if the given input
+ * doesn't match any of the MediaTypes on the given safelist.
+ *
+ * We compare everything except the parameters of the MediaTypes.
+ */
+export function mustMatchContentType(
+    input: MediaType,
+    safelist: MediaType[],
+    onError: OnError = THROW_THE_ERROR
+): void;
+```
+
+`mustMatchContentType()` is a _data guarantee_. Use it to prove that your `input` `MediaType` matches the `MediaTypes` on your safelist.
 
 ### MediaTypeMatchRegexIsBrokenError
 

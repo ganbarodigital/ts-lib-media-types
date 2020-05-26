@@ -24,6 +24,7 @@ The following changes have been completed, and will be included in the next tagg
 ### New
 
 * Added `matchesContentType()` data guard.
+* Added `mustMatchContentType()` data guarantee.
 * Added `UnexpectedContentTypeError` throwable Error.
 
 ## v1.1.0
