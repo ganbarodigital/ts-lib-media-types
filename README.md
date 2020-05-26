@@ -10,6 +10,7 @@ This TypeScript library provides a `MediaType` _value type_ that validates and s
   - [MediaType Value Type](#mediatype-value-type)
   - [MediaTypeParts Value Type](#mediatypeparts-value-type)
   - [isMediaType()](#ismediatype)
+  - [matchesContentType()](#matchescontenttype)
   - [parseContentType()](#parsecontenttype)
   - [parseMediaType()](#parsemediatype)
   - [mustBeMediaType()](#mustbemediatype)
@@ -179,6 +180,33 @@ export function isMediaType(input: string): boolean;
 `isMediaType()` is a _data guard_. Use it to prove that a string contains something with the structure of a MediaType:
 
     type "/" [tree "."] subtype ["+" suffix] *[";" parameter]
+
+### matchesContentType()
+
+```typescript
+// how to import this into your own code
+import { matchesContentType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+// types used for parameters
+import { MediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+/**
+ * Data guard. Returns `true` if your `input` matches any of the `expected`
+ * MediaTypes.
+ *
+ * We compare everything except the parameters of the MediaTypes.
+ *
+ * Use `mustMatchMediaType()` for the corresponding data guarantee.
+ */
+export function matchesContentType(input: MediaType, expected: MediaType[]): boolean;
+```
+
+`matchesContentType()` is a _data guard_. Use it to prove that a given MediaType matches any entry in a safelist.
+
+The comparison:
+
+* ignores the case of all the MediaTypes
+* ignores any parameters present in each MediaType
 
 ### parseContentType()
 

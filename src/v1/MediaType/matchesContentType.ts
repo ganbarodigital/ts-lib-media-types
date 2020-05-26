@@ -32,10 +32,23 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 
-export * from "./isMediaType";
-export * from "./matchesContentType";
-export * from "./mustBeMediaType";
-export * from "./MediaType";
-export * from "./MediaTypeParts";
-export * from "./parseContentType";
-export * from "./parseMediaType";
+import { MediaType } from "./MediaType";
+
+/**
+ * Data guard. Returns `true` if your `input` matches any of the `expected`
+ * MediaTypes.
+ *
+ * We compare everything except the parameters of the MediaTypes.
+ *
+ * Use `mustMatchMediaType()` for the corresponding data guarantee.
+ */
+export function matchesContentType(input: MediaType, expected: MediaType[]): boolean {
+    // what content type do we have?
+    const inputType = input.getContentType();
+
+    // we only need a single match
+    return expected.some((possible) => {
+        const possibleType = possible.getContentType();
+        return inputType === possibleType;
+    });
+}
