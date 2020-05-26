@@ -16,6 +16,7 @@ This TypeScript library provides a `MediaType` _value type_ that validates and s
   - [mustBeMediaType()](#mustbemediatype)
   - [MediaTypeMatchRegexIsBrokenError](#mediatypematchregexisbrokenerror)
   - [NotAMediaTypeError](#notamediatypeerror)
+  - [UnexpectedContentTypeError](#unexpectedcontenttypeerror)
 - [NPM Scripts](#npm-scripts)
   - [npm run clean](#npm-run-clean)
   - [npm run build](#npm-run-build)
@@ -321,6 +322,30 @@ export class NotAMediaTypeError extends AppError {
 ```
 
 `NotAMediaTypeError` is a throwable, structured `Error`. It's thrown whenever a string doesn't have the expected structure of a media type.
+
+### UnexpectedContentTypeError
+
+```typescript
+// how to import this into your own code
+import { UnexpectedContentTypeError } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+// base class
+import { AppError, AppErrorParams } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+
+// params object structure
+export interface UnexpectedContentTypeExtraData {
+    public: {
+        input: string;
+        required: string[];
+    };
+}
+
+export class UnexpectedContentTypeError extends AppError {
+    public constructor(params: UnexpectedContentTypeExtraData & AppErrorParams);
+}
+```
+
+`UnexpectedContentTypeError` is a throwable, structured `Error`. It's thrown whenever a given input `MediaType` doesn't match any of `MediaType`s in a given safelist.
 
 ## NPM Scripts
 

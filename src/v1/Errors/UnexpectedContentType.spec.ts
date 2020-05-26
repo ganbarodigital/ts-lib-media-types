@@ -31,8 +31,25 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import { expect } from "chai";
+import { describe } from "mocha";
 
-export { ERROR_TABLE } from "./PackageErrorTable";
-export { NotAMediaTypeError } from "./NotAMediaType";
-export { MediaTypeMatchRegexIsBrokenError } from "./MediaTypeMatchRegexIsBroken";
-export { UnexpectedContentTypeError } from "./UnexpectedContentType";
+import { UnexpectedContentTypeError } from ".";
+
+describe("UnexpectedContentTypeError", () => {
+    describe(".constructor()", () => {
+        it("creates a Javascript error", () => {
+            const unit = new UnexpectedContentTypeError({
+                public: {
+                    input: "text/html",
+                    required: [
+                        "text/json",
+                        "application/vnd.an-example+json",
+                    ],
+                }
+            });
+
+            expect(unit).to.be.instanceOf(Error);
+        });
+    });
+});

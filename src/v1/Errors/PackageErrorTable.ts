@@ -37,6 +37,7 @@ import { packageNameFrom } from "@ganbarodigital/ts-lib-packagename/lib/v1";
 
 import { MediaTypeMatchRegexIsBrokenTemplate } from "./MediaTypeMatchRegexIsBroken";
 import { NotAMediaTypeTemplate } from "./NotAMediaType";
+import { UnexpectedContentTypeTemplate } from "./UnexpectedContentType";
 
 const PACKAGE_NAME = packageNameFrom("@ganbarodigital/ts-lib-mediatypes");
 
@@ -56,6 +57,13 @@ export class PackageErrorTable implements ErrorTable {
         packageName: PACKAGE_NAME,
         errorName: "not-a-media-type",
         detail: "the given string does not have the structure of a MediaType",
+        status: httpStatusCodeFrom(422),
+    };
+
+    public "unexpected-content-type": UnexpectedContentTypeTemplate = {
+        packageName: PACKAGE_NAME,
+        errorName: "unexpected-content-type",
+        detail: "the given MediaType does not match any of the expected content types",
         status: httpStatusCodeFrom(422),
     };
 }
