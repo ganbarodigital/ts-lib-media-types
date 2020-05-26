@@ -40,7 +40,7 @@ import { MediaType } from "./MediaType";
 describe("matchesContentType()", () => {
     it("returns `true` if the input matches any of the `expected` media types", () => {
         const input = new MediaType("text/html");
-        const expected = [
+        const safelist = [
             new MediaType("application/json"),
             new MediaType("application/vnd.an-example"),
             new MediaType("text/html"),
@@ -49,13 +49,13 @@ describe("matchesContentType()", () => {
 
         const expectedValue = true;
 
-        const actualValue = matchesContentType(input, expected);
+        const actualValue = matchesContentType(input, safelist);
         expect(actualValue).to.equal(expectedValue);
     });
 
     it("returns `false` if the input does not match any of the `expected` media types", () => {
         const input = new MediaType("text/html");
-        const expected = [
+        const safelist = [
             new MediaType("application/json"),
             new MediaType("application/vnd.an-example"),
             new MediaType("text/plain"),
@@ -63,13 +63,13 @@ describe("matchesContentType()", () => {
 
         const expectedValue = false;
 
-        const actualValue = matchesContentType(input, expected);
+        const actualValue = matchesContentType(input, safelist);
         expect(actualValue).to.equal(expectedValue);
     });
 
     it("doesn't use the expected MediaType's parameters to do the comparison", () => {
         const input = new MediaType("text/html");
-        const expected = [
+        const safelist = [
             new MediaType("application/json"),
             new MediaType("application/vnd.an-example"),
             new MediaType("text/html; charset=UTF-8"),
@@ -78,13 +78,13 @@ describe("matchesContentType()", () => {
 
         const expectedValue = true;
 
-        const actualValue = matchesContentType(input, expected);
+        const actualValue = matchesContentType(input, safelist);
         expect(actualValue).to.equal(expectedValue);
     });
 
     it("doesn't use the input's MediaType parameters to do the comparison", () => {
         const input = new MediaType("text/html; charset=UTF-8");
-        const expected = [
+        const safelist = [
             new MediaType("application/json"),
             new MediaType("application/vnd.an-example"),
             new MediaType("text/html; param1=value1"),
@@ -93,7 +93,7 @@ describe("matchesContentType()", () => {
 
         const expectedValue = true;
 
-        const actualValue = matchesContentType(input, expected);
+        const actualValue = matchesContentType(input, safelist);
         expect(actualValue).to.equal(expectedValue);
     });
 });

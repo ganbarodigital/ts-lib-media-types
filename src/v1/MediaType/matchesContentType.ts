@@ -35,19 +35,19 @@
 import { MediaType } from "./MediaType";
 
 /**
- * Data guard. Returns `true` if your `input` matches any of the `expected`
- * MediaTypes.
+ * Data guard. Returns `true` if your `input` matches any of the MediaTypes
+ * in the `safelist`.
  *
  * We compare everything except the parameters of the MediaTypes.
  *
  * Use `mustMatchMediaType()` for the corresponding data guarantee.
  */
-export function matchesContentType(input: MediaType, expected: MediaType[]): boolean {
+export function matchesContentType(input: MediaType, safelist: MediaType[]): boolean {
     // what content type do we have?
     const inputType = input.getContentType();
 
     // we only need a single match
-    return expected.some((possible) => {
+    return safelist.some((possible) => {
         const possibleType = possible.getContentType();
         return inputType === possibleType;
     });

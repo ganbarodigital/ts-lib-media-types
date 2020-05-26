@@ -192,14 +192,14 @@ import { matchesContentType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
 import { MediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
 
 /**
- * Data guard. Returns `true` if your `input` matches any of the `expected`
- * MediaTypes.
+ * Data guard. Returns `true` if your `input` matches any of the MediaTypes
+ * in the `safelist`.
  *
  * We compare everything except the parameters of the MediaTypes.
  *
  * Use `mustMatchMediaType()` for the corresponding data guarantee.
  */
-export function matchesContentType(input: MediaType, expected: MediaType[]): boolean;
+export function matchesContentType(input: MediaType, safelist: MediaType[]): boolean;
 ```
 
 `matchesContentType()` is a _data guard_. Use it to prove that a given MediaType matches any entry in a safelist.
