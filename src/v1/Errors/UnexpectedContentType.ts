@@ -46,7 +46,9 @@ import { PackageErrorTable } from "./PackageErrorTable";
 export interface UnexpectedContentTypeExtraData extends ExtraPublicData {
     public: {
         input: string;
-        required: string[];
+        required: {
+            anyOf: string[];
+        }
     };
 }
 

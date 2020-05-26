@@ -336,7 +336,9 @@ import { AppError, AppErrorParams } from "@ganbarodigital/ts-lib-error-reporting
 export interface UnexpectedContentTypeExtraData {
     public: {
         input: string;
-        required: string[];
+        required: {
+            anyOf: string[];
+        }
     };
 }
 

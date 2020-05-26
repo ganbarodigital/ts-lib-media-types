@@ -42,10 +42,12 @@ describe("UnexpectedContentTypeError", () => {
             const unit = new UnexpectedContentTypeError({
                 public: {
                     input: "text/html",
-                    required: [
-                        "text/json",
-                        "application/vnd.an-example+json",
-                    ],
+                    required: {
+                        anyOf: [
+                            "text/json",
+                            "application/vnd.an-example+json",
+                        ],
+                    }
                 }
             });
 
