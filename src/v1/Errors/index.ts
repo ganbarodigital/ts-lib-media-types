@@ -35,3 +35,4 @@
 export { ERROR_TABLE } from "./PackageErrorTable";
 export { NotAMediaTypeError } from "./NotAMediaType";
 export { MediaTypeMatchRegexIsBrokenError } from "./MediaTypeMatchRegexIsBroken";
+export { UnexpectedContentTypeError } from "./UnexpectedContentType";

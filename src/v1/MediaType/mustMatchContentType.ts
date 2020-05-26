@@ -31,12 +31,37 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
 
-export * from "./isMediaType";
-export * from "./matchesContentType";
-export * from "./mustBeMediaType";
-export * from "./mustMatchContentType";
-export * from "./MediaType";
-export * from "./MediaTypeParts";
-export * from "./parseContentType";
-export * from "./parseMediaType";
+import { MediaType } from "./MediaType";
+import { UnexpectedContentTypeError } from "../Errors/UnexpectedContentType";
+import { matchesContentType } from "./matchesContentType";
+
+/**
+ * Data guarantee. Calls your onError handler if the given input
+ * doesn't match any of the expected MediaTypes.
+ *
+ * We compare everything except the parameters of the MediaTypes.
+ */
+export function mustMatchContentType(input: MediaType, safelist: MediaType[], onError: OnError = THROW_THE_ERROR): void {
+    // does it match?
+    if (matchesContentType(input, safelist)) {
+        // yes it does!
+        return;
+    }
+
+    // which content types have we checked it against?
+    const checkedAgainst = safelist.map(
+        (mt) => mt.getContentType()
+    );
+
+    // tell the caller what happened
+    onError(new UnexpectedContentTypeError({
+        public: {
+            input: input.getContentType(),
+            required: {
+                anyOf: checkedAgainst,
+            },
+        }
+    }));
+}

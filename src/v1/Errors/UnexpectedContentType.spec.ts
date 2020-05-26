@@ -31,12 +31,27 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import { expect } from "chai";
+import { describe } from "mocha";
 
-export * from "./isMediaType";
-export * from "./matchesContentType";
-export * from "./mustBeMediaType";
-export * from "./mustMatchContentType";
-export * from "./MediaType";
-export * from "./MediaTypeParts";
-export * from "./parseContentType";
-export * from "./parseMediaType";
+import { UnexpectedContentTypeError } from ".";
+
+describe("UnexpectedContentTypeError", () => {
+    describe(".constructor()", () => {
+        it("creates a Javascript error", () => {
+            const unit = new UnexpectedContentTypeError({
+                public: {
+                    input: "text/html",
+                    required: {
+                        anyOf: [
+                            "text/json",
+                            "application/vnd.an-example+json",
+                        ],
+                    }
+                }
+            });
+
+            expect(unit).to.be.instanceOf(Error);
+        });
+    });
+});

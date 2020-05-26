@@ -21,6 +21,16 @@ For each release, changes are grouped under these headings:
 
 The following changes have been completed, and will be included in the next tagged release.
 
+## v1.2.0
+
+Released Tuesday, 26th May 2020.
+
+### New
+
+* Added `matchesContentType()` data guard.
+* Added `mustMatchContentType()` data guarantee.
+* Added `UnexpectedContentTypeError` throwable Error.
+
 ## v1.1.0
 
 Released Friday, 22nd May 2020.

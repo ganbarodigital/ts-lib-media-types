@@ -10,11 +10,14 @@ This TypeScript library provides a `MediaType` _value type_ that validates and s
   - [MediaType Value Type](#mediatype-value-type)
   - [MediaTypeParts Value Type](#mediatypeparts-value-type)
   - [isMediaType()](#ismediatype)
+  - [matchesContentType()](#matchescontenttype)
   - [parseContentType()](#parsecontenttype)
   - [parseMediaType()](#parsemediatype)
   - [mustBeMediaType()](#mustbemediatype)
+  - [mustMatchContentType()](#mustmatchcontenttype)
   - [MediaTypeMatchRegexIsBrokenError](#mediatypematchregexisbrokenerror)
   - [NotAMediaTypeError](#notamediatypeerror)
+  - [UnexpectedContentTypeError](#unexpectedcontenttypeerror)
 - [NPM Scripts](#npm-scripts)
   - [npm run clean](#npm-run-clean)
   - [npm run build](#npm-run-build)
@@ -180,6 +183,33 @@ export function isMediaType(input: string): boolean;
 
     type "/" [tree "."] subtype ["+" suffix] *[";" parameter]
 
+### matchesContentType()
+
+```typescript
+// how to import this into your own code
+import { matchesContentType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+// types used for parameters
+import { MediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+/**
+ * Data guard. Returns `true` if your `input` matches any of the MediaTypes
+ * in the `safelist`.
+ *
+ * We compare everything except the parameters of the MediaTypes.
+ *
+ * Use `mustMatchMediaType()` for the corresponding data guarantee.
+ */
+export function matchesContentType(input: MediaType, safelist: MediaType[]): boolean;
+```
+
+`matchesContentType()` is a _data guard_. Use it to prove that a given MediaType matches any entry in a safelist.
+
+The comparison:
+
+* ignores the case of all the MediaTypes
+* ignores any parameters present in each MediaType
+
 ### parseContentType()
 
 ```typescript
@@ -253,6 +283,31 @@ export function mustBeMediaType(input: string, onError: OnError = THROW_THE_ERRO
 
 `mustBeMediaType()` is a _data guarantee_. Use it to ensure that the given string has the structure of a RFC-compliant media type.
 
+### mustMatchContentType()
+
+```typescript
+// how to import this into your own code
+import { mustMatchContentType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+// types used for parameters
+import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+import { MediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+/**
+ * Data guarantee. Calls your onError handler if the given input
+ * doesn't match any of the MediaTypes on the given safelist.
+ *
+ * We compare everything except the parameters of the MediaTypes.
+ */
+export function mustMatchContentType(
+    input: MediaType,
+    safelist: MediaType[],
+    onError: OnError = THROW_THE_ERROR
+): void;
+```
+
+`mustMatchContentType()` is a _data guarantee_. Use it to prove that your `input` `MediaType` matches the `MediaTypes` on your safelist.
+
 ### MediaTypeMatchRegexIsBrokenError
 
 ```typescript
@@ -293,6 +348,32 @@ export class NotAMediaTypeError extends AppError {
 ```
 
 `NotAMediaTypeError` is a throwable, structured `Error`. It's thrown whenever a string doesn't have the expected structure of a media type.
+
+### UnexpectedContentTypeError
+
+```typescript
+// how to import this into your own code
+import { UnexpectedContentTypeError } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+// base class
+import { AppError, AppErrorParams } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+
+// params object structure
+export interface UnexpectedContentTypeExtraData {
+    public: {
+        input: string;
+        required: {
+            anyOf: string[];
+        }
+    };
+}
+
+export class UnexpectedContentTypeError extends AppError {
+    public constructor(params: UnexpectedContentTypeExtraData & AppErrorParams);
+}
+```
+
+`UnexpectedContentTypeError` is a throwable, structured `Error`. It's thrown whenever a given input `MediaType` doesn't match any of `MediaType`s in a given safelist.
 
 ## NPM Scripts
 
