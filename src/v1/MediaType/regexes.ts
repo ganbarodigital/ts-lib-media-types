@@ -33,7 +33,7 @@
 //
 
 // tslint:disable-next-line: max-line-length
-export const MediaTypeMatchRegex = /^(?<contentType>(?<type>[A-Za-z0-9][-\w!#$&^]*)\/((?<tree>[A-Za-z0-9][\w\d-!#$&^]*)\.){0,1}(?<subtype>[A-Za-z0-9][\w\d-!#$&^]+)(\+(?<suffix>[\w\d]+)){0,1})(;[\s]+(?<parameter>[\w\d]+=([\w\d-!#$&^]+|"[^"]*\")))*$/;
+export const MediaTypeMatchRegex = /^(?<contentType>(?<type>[A-Za-z0-9][-\w!#$&^]*)\/((?<tree>[A-Za-z0-9][\w\d-!#$&^]*)\.){0,1}(?<subtype>[^+()<>@,;:\\/"[\]?=+]+)(\+(?<suffix>[\w\d]+)){0,1})(;[\s]+(?<parameter>[\w\d]+=([^+()<>@,;:\\/"[\]?=]+|"[^"]*\")))*$/;
 
 // tslint:disable-next-line: max-line-length
-export const MediaTypeParamRegex = /(;[\s]+((?<parameterName>[\w\d]+)=((?<parameterValueA>[\w\d-!#$&^]+)|"(?<parameterValueB>[^"]*)")))/g;
+export const MediaTypeParamRegex = /(;[\s]+((?<parameterName>[\w\d]+)=((?<parameterValueA>[^+()<>@,;:\\/"[\]?=+]+)|"(?<parameterValueB>[^"]*)")))/g;

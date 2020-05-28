@@ -25,6 +25,15 @@ The following changes have been completed, and will be included in the next tagg
 
 Released Thursday, 28th May 2020.
 
+### Fixes
+
+* Fix `isMediaType()` to support `application/vnd.oai.openapi+json; version=3.0`
+  - `subtype` and `parameterValue` regexes fixed to better match the RFC
+
+## v1.2.1
+
+Released Thursday, 28th May 2020.
+
 ### Dependencies
 
 * Bumped to `ts-lib-value-objects` v2.0
