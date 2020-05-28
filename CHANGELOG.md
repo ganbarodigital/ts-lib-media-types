@@ -21,6 +21,10 @@ For each release, changes are grouped under these headings:
 
 The following changes have been completed, and will be included in the next tagged release.
 
+### Dependencies
+
+* Bumped to `ts-lib-value-objects` v2.0
+
 ## v1.2.0
 
 Released Tuesday, 26th May 2020.
