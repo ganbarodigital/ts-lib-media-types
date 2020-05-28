@@ -83,6 +83,21 @@ export const ValidMediaTypeExamples: MediaTypeExamples = {
         subtype: "tie-record",
         suffix: "json",
     },
+    "application/vnd.oai.openapi+json": {
+        type: "application",
+        tree: "vnd",
+        subtype: "oai.openapi",
+        suffix: "json",
+    },
+    "application/vnd.oai.openapi+json; version=3.0": {
+        type: "application",
+        tree: "vnd",
+        subtype: "oai.openapi",
+        suffix: "json",
+        parameters: {
+            version: "3.0",
+        }
+    }
 };
 
 export const InvalidMediaTypeExamples = [
@@ -98,4 +113,5 @@ export const ValidContentTypeExamples: ContentTypeExamples = {
     "application/vnd.record": "application/vnd.record",
     "application/vnd.tie-record": "application/vnd.tie-record",
     "application/vnd.tie-record+json": "application/vnd.tie-record+json",
+    "application/vnd.oai.openapi+json; version=3.0": "application/vnd.oai.openapi+json",
 };

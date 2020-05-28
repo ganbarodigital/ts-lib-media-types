@@ -21,6 +21,11 @@ For each release, changes are grouped under these headings:
 
 The following changes have been completed, and will be included in the next tagged release.
 
+### Fixes
+
+* Fix `isMediaType()` to support `application/vnd.oai.openapi+json; version=3.0`
+  - `subtype` and `parameterValue` regexes fixed to better match the RFC
+
 ## v1.2.1
 
 Released Thursday, 28th May 2020.
