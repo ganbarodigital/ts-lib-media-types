@@ -39,7 +39,7 @@ import { matchesContentType } from "./matchesContentType";
 
 /**
  * Data guarantee. Calls your onError handler if the given input
- * doesn't match any of the expected MediaTypes.
+ * doesn't match any of the MediaTypes on the given safelist.
  *
  * We compare everything except the parameters of the MediaTypes.
  */
