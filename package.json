@@ -1,6 +1,6 @@
 {
   "name": "@ganbarodigital/ts-lib-mediatype",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "TypeScript support for RFC-2045 / RFC-6838 MediaTypes",
   "repository": "github:ganbarodigital/ts-lib-mediatype",
   "main": "lib/index.js",
