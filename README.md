@@ -18,12 +18,17 @@ This TypeScript library provides a `MediaType` _value type_ that validates and s
 - [ContentType](#contenttype)
   - [ContentType Value Type](#contenttype-value-type)
   - [contentTypeFrom()](#contenttypefrom)
+  - [contentTypeFromMediaType()](#contenttypefrommediatype)
   - [mustMatchContentType()](#mustmatchcontenttype)
   - [isContentType()](#iscontenttype)
   - [mustBeContentType()](#mustbecontenttype)
   - [parseContentType()](#parsecontenttype)
   - [NotAContentTypeError](#notacontenttypeerror)
   - [UnexpectedContentTypeError](#unexpectedcontenttypeerror)
+- [Helpers](#helpers)
+  - [ContentTypeOrMediaType](#contenttypeormediatype)
+  - [resolveToContentType()](#resolvetocontenttype)
+  - [resolveToMediaType()](#resolvetomediatype)
 - [NPM Scripts](#npm-scripts)
   - [npm run clean](#npm-run-clean)
   - [npm run build](#npm-run-build)
@@ -529,6 +534,44 @@ export class UnexpectedContentTypeError extends AppError {
 ```
 
 `UnexpectedContentTypeError` is a throwable, structured `Error`. It's thrown whenever a given input `MediaType` doesn't match any of `MediaType`s in a given safelist.
+
+## Helpers
+
+### ContentTypeOrMediaType
+
+```typescript
+/**
+ * where either type will do
+ *
+ * use `resolveToContentType()` or `resolveToMediaType()` to turn
+ * your values into one or the other
+ */
+export type ContentTypeOrMediaType = ContentType | MediaType;
+```
+
+### resolveToContentType()
+
+```typescript
+/**
+ * is it a ContentType? is it a MediaType? whatever it is, we
+ * turn it onto a ContentType
+ */
+export function resolveToContentType(input: ContentTypeOrMediaType): ContentType;
+```
+
+`resolveToContentType()` is a _data resolver_. It converts the given input to always be a `ContentType`.
+
+### resolveToMediaType()
+
+```typescript
+/**
+ * is it a ContentType? is it a MediaType? whatever it is, we
+ * turn it onto a MediaType
+ */
+export function resolveToMediaType(input: ContentTypeOrMediaType): MediaType;
+```
+
+`resolveToMediaType()` is a _data resolver_. It converts the given input to always be a `MediaType`.
 
 ## NPM Scripts
 

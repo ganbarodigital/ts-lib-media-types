@@ -32,6 +32,10 @@ The following changes have been completed, and will be included in the next tagg
   - added `NotAContentTypeError` throwable error
 * Errors
   - UnexpectedContentTypeError now requires a `ContentType` as the public data
+* Helpers
+  - added `ContentTypeOrMediaType` type
+  - added `resolveToContentType()` helper
+  - added `resolveToMediaType()` helper
 
 ### Deprecations
 
