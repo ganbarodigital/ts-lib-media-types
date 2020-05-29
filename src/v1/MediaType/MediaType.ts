@@ -67,12 +67,14 @@ export class MediaType extends RefinedString {
 
     /**
      * Gets the 'text/html' bit from 'text/html; charset=UTF-8' (for example)
+     *
+     * @deprecated use `contentTypeFromMediaType()` instead
      */
     public getContentType(): string {
         // haven't we already done this?
         if (!this.#contentType) {
             // no, first time for everything!
-            this.#contentType = parseContentType(this.value, THROW_THE_ERROR);
+            this.#contentType = parseContentType(this.valueOf());
         }
 
         // return our cached value

@@ -32,7 +32,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 import { OnError } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
-import { makeRefinedTypeFactory } from "@ganbarodigital/ts-lib-value-objects/lib/v2";
+import { makeRefinedTypeFactoryWithFormatter } from "@ganbarodigital/ts-lib-value-objects/lib/v2";
 
 import { ContentType } from "./ContentType";
 import { mustBeContentType } from "./mustBeContentType";
@@ -42,5 +42,10 @@ type ContentTypeBuilder = (input: string, onError?: OnError) => ContentType;
 /**
  * Smart constructor. Creates a validated `ContentType` from your given
  * input string.
+ *
+ * The resulting ContentType is always lowercase.
  */
-export const contentTypeFrom: ContentTypeBuilder = makeRefinedTypeFactory(mustBeContentType);
+export const contentTypeFrom: ContentTypeBuilder = makeRefinedTypeFactoryWithFormatter(
+    mustBeContentType,
+    (x) => x.toLowerCase(),
+);

@@ -356,6 +356,8 @@ import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting
 /**
  * Smart constructor. Creates a validated `ContentType` from your given
  * input string.
+ *
+ * The returned ContentType is always in lower case.
  */
 export function contentTypeFrom(input: string, onError: OnError = THROW_THE_ERROR): ContentType;
 ```
