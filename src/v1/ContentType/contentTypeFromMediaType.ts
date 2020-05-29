@@ -34,12 +34,11 @@
 import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
 
 import { NotAMediaTypeError } from "../Errors";
-import { ContentType, contentTypeFrom } from ".";
+import { ContentType } from ".";
 import { MediaTypeMatchRegex } from "../MediaType/regexes";
 import { MediaTypeMatchRegexIsBrokenError } from "../Errors/MediaTypeMatchRegexIsBroken";
 import { MediaType } from "../MediaType/MediaType";
-
-type CaseConverter = (input: string) => string;
+import { _contentTypeFrom } from "./contentTypeFrom";
 
 /**
  * Smart constructor. Extracts everything but the parameters from an RFC-compliant
@@ -47,10 +46,13 @@ type CaseConverter = (input: string) => string;
  *
  * The ContentType is always in lower-case.
  */
-export const contentTypeFromMediaType = contentTypeFromMediaTypeUnbound.bind(
+export const contentTypeFromMediaType = _contentTypeFromMediaType.bind(
     null,
     MediaTypeMatchRegex,
+    (x) => x.toLowerCase(),
 );
+
+type CaseConverter = (x: string) => string;
 
 /**
  * Smart constructor. Extracts everything but the parameters from an RFC-compliant
@@ -58,11 +60,11 @@ export const contentTypeFromMediaType = contentTypeFromMediaTypeUnbound.bind(
  *
  * The result is run through the `caseConverter` function.
  */
-export function contentTypeFromMediaTypeUnbound(
+export function _contentTypeFromMediaType(
     matchRegex: RegExp,
+    caseConverter: CaseConverter,
     input: MediaType,
     onError: OnError = THROW_THE_ERROR,
-    caseConverter: CaseConverter = (x) => x.toLocaleLowerCase(),
 ): ContentType {
     // shorthand
     const mt = input.valueOf();
@@ -73,7 +75,6 @@ export function contentTypeFromMediaTypeUnbound(
     }
 
     // special case - the regex has no named groups in it any more
-    // this code is unreachable for testing purposes :(
     if (regResult.groups === undefined) {
         throw onError(new MediaTypeMatchRegexIsBrokenError({}));
     }
@@ -82,5 +83,5 @@ export function contentTypeFromMediaTypeUnbound(
     //
     // this guarantees forward-compatibility, and it will catch any
     // errors where the ContentType and MediaType regexes have diverged
-    return contentTypeFrom(caseConverter(regResult.groups.contentType));
+    return _contentTypeFrom(caseConverter, regResult.groups.contentType);
 }

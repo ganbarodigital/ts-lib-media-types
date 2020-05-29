@@ -36,7 +36,8 @@ import { describe } from "mocha";
 
 import { MediaTypeMatchRegexIsBrokenError } from "../Errors/MediaTypeMatchRegexIsBroken";
 import { ValidContentTypeFromMediaTypeExamples } from "../MediaType/MediaTypeExamples.spec";
-import { contentTypeFromMediaType, contentTypeFromMediaTypeUnbound } from "./contentTypeFromMediaType";
+import { contentTypeFromMediaType } from ".";
+import {_contentTypeFromMediaType } from "./contentTypeFromMediaType";
 import { MediaType } from "../MediaType/MediaType";
 import { NotAMediaTypeError } from "../Errors";
 
@@ -46,7 +47,7 @@ const NeverMatchesRegex = /^THISWILLNEVERMATCH$/;
 // a valid regex, that doesn't populate named groups
 const BrokenMatchRegex = /^.*$/;
 
-describe("extractContentTypeFromMediaType()", () => {
+describe("contentTypeFromMediaType()", () => {
     // tslint:disable-next-line: forin
     for (const inputValue in ValidContentTypeFromMediaTypeExamples) {
         it("correctly parses '" + inputValue + '"', () => {
@@ -59,16 +60,18 @@ describe("extractContentTypeFromMediaType()", () => {
 
     it("throws NotAMediaTypeError if (somehow) we pass an invalid media type in", () => {
         const inputValue = new MediaType("text/plain");
-        expect(() => contentTypeFromMediaTypeUnbound(
+        expect(() => _contentTypeFromMediaType(
             NeverMatchesRegex,
+            (x) => x,
             inputValue,
         )).to.throw(NotAMediaTypeError);
     });
 
     it("throws MediaTypeMatchRegexIsBrokenError if we use a garbage parser", () => {
         const inputValue = new MediaType("text/plain");
-        expect(() => contentTypeFromMediaTypeUnbound(
+        expect(() => _contentTypeFromMediaType(
             BrokenMatchRegex,
+            (x) => x,
             inputValue,
         )).to.throw(MediaTypeMatchRegexIsBrokenError);
     });

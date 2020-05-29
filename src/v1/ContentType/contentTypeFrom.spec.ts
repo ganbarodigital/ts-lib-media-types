@@ -34,7 +34,7 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 
-import { contentTypeFrom } from "./contentTypeFrom";
+import { contentTypeFrom } from ".";
 import { InvalidMediaTypeExamples, ValidContentTypeExamples } from "../MediaType/MediaTypeExamples.spec";
 import { NotAContentTypeError } from "../Errors";
 

@@ -31,21 +31,40 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
-import { OnError } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
-import { makeRefinedTypeFactoryWithFormatter } from "@ganbarodigital/ts-lib-value-objects/lib/v2";
+import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
 
 import { ContentType } from "./ContentType";
 import { mustBeContentType } from "./mustBeContentType";
 
-type ContentTypeBuilder = (input: string, onError?: OnError) => ContentType;
-
 /**
- * Smart constructor. Creates a validated `ContentType` from your given
- * input string.
+ * Smart constructor. Takes a string that contains everything but the
+ * parameters from an RFC-compliant MediaType, and returns it as a
+ * ContentType value.
  *
- * The resulting ContentType is always lowercase.
+ * The ContentType is always in lower-case.
  */
-export const contentTypeFrom: ContentTypeBuilder = makeRefinedTypeFactoryWithFormatter(
-    mustBeContentType,
+export const contentTypeFrom = _contentTypeFrom.bind(
+    null,
     (x) => x.toLowerCase(),
 );
+
+type CaseConverter = (x: string) => string;
+
+/**
+ * Smart constructor. Takes a string that contains everything but the
+ * parameters from an RFC-compliant MediaType, and returns it as a
+ * ContentType value.
+ *
+ * The result is run through the `caseConverter` function.
+ */
+export function _contentTypeFrom(
+    caseConverter: CaseConverter,
+    input: string,
+    onError: OnError = THROW_THE_ERROR,
+): ContentType {
+    // make sure all the regexes match
+    mustBeContentType(input, onError);
+
+    // all done
+    return caseConverter(input) as ContentType;
+}

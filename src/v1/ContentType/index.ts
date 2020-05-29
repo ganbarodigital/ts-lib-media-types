@@ -33,7 +33,7 @@
 //
 
 export * from "./ContentType";
-export * from "./contentTypeFrom";
-export * from "./contentTypeFromMediaType";
+export { contentTypeFrom } from "./contentTypeFrom";
+export { contentTypeFromMediaType } from "./contentTypeFromMediaType";
 export * from "./isContentType";
 export * from "./mustBeContentType";
