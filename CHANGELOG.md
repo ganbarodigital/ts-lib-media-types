@@ -30,6 +30,7 @@ The following changes have been completed, and will be included in the next tagg
   - added `isContentType()` data guard
   - added `mustBeContentType()` data guarantee
   - added `NotAContentTypeError` throwable error
+  - `matchesContentType()` and `mustMatchContentType()` now accept any mix of ContentTypes or MediaTypes
 * Errors
   - UnexpectedContentTypeError now requires a `ContentType` as the public data
 * Helpers

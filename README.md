@@ -201,7 +201,7 @@ export function isMediaType(input: string): boolean;
 import { matchesContentType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
 
 // types used for parameters
-import { MediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+import { ContentTypeOrMediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
 
 /**
  * Data guard. Returns `true` if your `input` matches any of the MediaTypes
@@ -211,7 +211,10 @@ import { MediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
  *
  * Use `mustMatchMediaType()` for the corresponding data guarantee.
  */
-export function matchesContentType(input: MediaType, safelist: MediaType[]): boolean;
+export function matchesContentType(
+    input: ContentTypeOrMediaType,
+    safelist: ContentTypeOrMediaType[]
+): boolean;
 ```
 
 `matchesContentType()` is a _data guard_. Use it to prove that a given MediaType matches any entry in a safelist.
@@ -405,7 +408,7 @@ import { mustMatchContentType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
 
 // types used for parameters
 import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
-import { MediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+import { ContentTypeOrMediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
 
 /**
  * Data guarantee. Calls your onError handler if the given input
@@ -414,8 +417,8 @@ import { MediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
  * We compare everything except the parameters of the MediaTypes.
  */
 export function mustMatchContentType(
-    input: MediaType,
-    safelist: MediaType[],
+    input: ContentTypeOrMediaType,
+    safelist: ContentTypeOrMediaType[],
     onError: OnError = THROW_THE_ERROR
 ): void;
 ```
