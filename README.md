@@ -514,9 +514,9 @@ import { AppError, AppErrorParams } from "@ganbarodigital/ts-lib-error-reporting
 // params object structure
 export interface UnexpectedContentTypeExtraData {
     public: {
-        input: string;
+        input: ContentType;
         required: {
-            anyOf: string[];
+            anyOf: ContentType[];
         }
     };
 }

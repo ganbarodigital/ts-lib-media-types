@@ -36,6 +36,7 @@ import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting
 import { MediaType } from "./MediaType";
 import { UnexpectedContentTypeError } from "../Errors/UnexpectedContentType";
 import { matchesContentType } from "./matchesContentType";
+import { contentTypeFromMediaType } from "../ContentType";
 
 /**
  * Data guarantee. Calls your onError handler if the given input
@@ -52,13 +53,13 @@ export function mustMatchContentType(input: MediaType, safelist: MediaType[], on
 
     // which content types have we checked it against?
     const checkedAgainst = safelist.map(
-        (mt) => mt.getContentType()
+        (mt) => contentTypeFromMediaType(mt)
     );
 
     // tell the caller what happened
     onError(new UnexpectedContentTypeError({
         public: {
-            input: input.getContentType(),
+            input: contentTypeFromMediaType(input),
             required: {
                 anyOf: checkedAgainst,
             },

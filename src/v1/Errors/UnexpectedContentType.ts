@@ -42,10 +42,11 @@ import {
 
 import { ERROR_TABLE } from ".";
 import { PackageErrorTable } from "./PackageErrorTable";
+import { ContentType } from "../ContentType";
 
 export interface UnexpectedContentTypeExtraData extends ExtraPublicData {
     public: {
-        input: string;
+        input: ContentType;
         required: {
             anyOf: string[];
         }
