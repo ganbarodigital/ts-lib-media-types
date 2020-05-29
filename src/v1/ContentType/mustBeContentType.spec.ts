@@ -31,7 +31,22 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import { expect } from "chai";
+import { describe } from "mocha";
 
-export * from "./ContentType";
-export * from "./isContentType";
-export * from "./mustBeContentType";
+import { InvalidMediaTypeExamples, ValidContentTypeExamples } from "../MediaType/MediaTypeExamples.spec";
+import { mustBeContentType } from "./mustBeContentType";
+
+describe("mustBeContentType()", () => {
+    for (const inputValue of ValidContentTypeExamples) {
+        it("accepts example '" + inputValue + "'", () => {
+            expect(() => mustBeContentType(inputValue)).to.not.throw();
+        });
+    }
+
+    for (const inputValue of InvalidMediaTypeExamples) {
+        it("rejects example '" + inputValue + "'", () => {
+            expect(() => mustBeContentType(inputValue)).to.throw();
+        });
+    }
+});
