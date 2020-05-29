@@ -17,6 +17,7 @@ This TypeScript library provides a `MediaType` _value type_ that validates and s
   - [NotAMediaTypeError](#notamediatypeerror)
 - [ContentType](#contenttype)
   - [ContentType Value Type](#contenttype-value-type)
+  - [contentTypeFrom()](#contenttypefrom)
   - [mustMatchContentType()](#mustmatchcontenttype)
   - [isContentType()](#iscontenttype)
   - [mustBeContentType()](#mustbecontenttype)
@@ -324,6 +325,42 @@ export type ContentType = Branded<string, "ContentType">;
 `ContentType` is a _value type_. It holds everything except the parameters from a `MediaType`.
 
 NOTE that `ContentType` is an `interface`, not a `class`. It's a type that only exists at compile-time. You can't use it with the `instanceof` operator at runtime.
+
+Use `contentTypeFrom()` to create a new `ContentType` value:
+
+```typescript
+const myContentType = contentTypeFrom("text/html");
+```
+
+While you can technically do this:
+
+```typescript
+const myContentType = "text/html" as ContentType;
+```
+
+it's an unsafe practice.
+
+* `XXX as Type` is a compiler override. It bypasses the compiler's type checking. It should only ever be used as a last resort.
+* `contentTypeFrom()` will catch any silly mistakes that aren't a well-formatted content type.
+* It will break if we ever change the underlying definition of `ContentType` in the future, whereas using `contentTypeFrom()` guarantees forward-compatibility.
+
+### contentTypeFrom()
+
+```typescript
+// how to import this into your own code
+import { contentTypeFrom } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+// types used in parameters / return values
+import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+
+/**
+ * Smart constructor. Creates a validated `ContentType` from your given
+ * input string.
+ */
+export function contentTypeFrom(input: string, onError: OnError = THROW_THE_ERROR): ContentType;
+```
+
+```contentTypeFrom()` is a _smart constructor_. Use it to create a `ContentType` value.
 
 ### mustMatchContentType()
 

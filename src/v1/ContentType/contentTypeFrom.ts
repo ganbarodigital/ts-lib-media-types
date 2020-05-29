@@ -31,8 +31,16 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import { OnError } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+import { makeRefinedTypeFactory } from "@ganbarodigital/ts-lib-value-objects/lib/v2";
 
-export * from "./ContentType";
-export * from "./contentTypeFrom";
-export * from "./isContentType";
-export * from "./mustBeContentType";
+import { ContentType } from "./ContentType";
+import { mustBeContentType } from "./mustBeContentType";
+
+type ContentTypeBuilder = (input: string, onError?: OnError) => ContentType;
+
+/**
+ * Smart constructor. Creates a validated `ContentType` from your given
+ * input string.
+ */
+export const contentTypeFrom: ContentTypeBuilder = makeRefinedTypeFactory(mustBeContentType);
