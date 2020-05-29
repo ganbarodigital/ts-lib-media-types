@@ -6,17 +6,19 @@ This TypeScript library provides a `MediaType` _value type_ that validates and s
 
 - [Introduction](#introduction)
 - [Quick Start](#quick-start)
-- [v1 API](#v1-api)
+- [MediaType](#mediatype)
   - [MediaType Value Type](#mediatype-value-type)
   - [MediaTypeParts Value Type](#mediatypeparts-value-type)
   - [isMediaType()](#ismediatype)
   - [matchesContentType()](#matchescontenttype)
-  - [parseContentType()](#parsecontenttype)
   - [parseMediaType()](#parsemediatype)
   - [mustBeMediaType()](#mustbemediatype)
-  - [mustMatchContentType()](#mustmatchcontenttype)
   - [MediaTypeMatchRegexIsBrokenError](#mediatypematchregexisbrokenerror)
   - [NotAMediaTypeError](#notamediatypeerror)
+- [ContentType](#contenttype)
+  - [ContentType Value Type](#contenttype-value-type)
+  - [mustMatchContentType()](#mustmatchcontenttype)
+  - [parseContentType()](#parsecontenttype)
   - [UnexpectedContentTypeError](#unexpectedcontenttypeerror)
 - [NPM Scripts](#npm-scripts)
   - [npm run clean](#npm-run-clean)
@@ -38,7 +40,7 @@ import { MediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1"
 
 __VS Code users:__ once you've added a single import anywhere in your project, you'll then be able to auto-import anything else that this library exports.
 
-## v1 API
+## MediaType
 
 ### MediaType Value Type
 
@@ -210,33 +212,6 @@ The comparison:
 * ignores the case of all the MediaTypes
 * ignores any parameters present in each MediaType
 
-### parseContentType()
-
-```typescript
-// how to import this into your own code
-import { parseContentType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
-
-// types used for parameters
-import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
-
-/**
- * Data parser. Extracts everything but the parameters from an RFC-compliant
- * MediaType, and returns it as a single string.
- *
- * The result is returned as a lower-case string.
- */
-export function parseContentType(
-    input: string,
-    onError: OnError = THROW_THE_ERROR,
-): string;
-```
-
-`parseContentType()` is a _data parser_. Use it to extract the `text/html` section from `text/html; charset=UTF-8` (for example).
-
-NOTE that `parseContentType()` always returns a lower-case string.
-
-If you need to preserve the case of the result string, have a look at our undocumented `parseContentTypeUnbound()` function.
-
 ### parseMediaType()
 
 ```typescript
@@ -283,31 +258,6 @@ export function mustBeMediaType(input: string, onError: OnError = THROW_THE_ERRO
 
 `mustBeMediaType()` is a _data guarantee_. Use it to ensure that the given string has the structure of a RFC-compliant media type.
 
-### mustMatchContentType()
-
-```typescript
-// how to import this into your own code
-import { mustMatchContentType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
-
-// types used for parameters
-import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
-import { MediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
-
-/**
- * Data guarantee. Calls your onError handler if the given input
- * doesn't match any of the MediaTypes on the given safelist.
- *
- * We compare everything except the parameters of the MediaTypes.
- */
-export function mustMatchContentType(
-    input: MediaType,
-    safelist: MediaType[],
-    onError: OnError = THROW_THE_ERROR
-): void;
-```
-
-`mustMatchContentType()` is a _data guarantee_. Use it to prove that your `input` `MediaType` matches the `MediaTypes` on your safelist.
-
 ### MediaTypeMatchRegexIsBrokenError
 
 ```typescript
@@ -348,6 +298,81 @@ export class NotAMediaTypeError extends AppError {
 ```
 
 `NotAMediaTypeError` is a throwable, structured `Error`. It's thrown whenever a string doesn't have the expected structure of a media type.
+
+## ContentType
+
+### ContentType Value Type
+
+```typescript
+// how to import this into your own code
+import { ContentType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+/**
+ * everything except the parameters from a MediaType,
+ *
+ * e.g. the `text/html` bit from `text/html; charset=UTF-8`
+ *
+ * At compile-time, this type resolves down to being a normal string.
+ * Think of it as an interface.
+ */
+export type ContentType = Branded<string, "ContentType">;
+```
+
+`ContentType` is a _value type_. It holds everything except the parameters from a `MediaType`.
+
+NOTE that `ContentType` is an `interface`, not a `class`. It's a type that only exists at compile-time. You can't use it with the `instanceof` operator at runtime.
+
+### mustMatchContentType()
+
+```typescript
+// how to import this into your own code
+import { mustMatchContentType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+// types used for parameters
+import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+import { MediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+/**
+ * Data guarantee. Calls your onError handler if the given input
+ * doesn't match any of the MediaTypes on the given safelist.
+ *
+ * We compare everything except the parameters of the MediaTypes.
+ */
+export function mustMatchContentType(
+    input: MediaType,
+    safelist: MediaType[],
+    onError: OnError = THROW_THE_ERROR
+): void;
+```
+
+`mustMatchContentType()` is a _data guarantee_. Use it to prove that your `input` `MediaType` matches the `MediaTypes` on your safelist.
+
+### parseContentType()
+
+```typescript
+// how to import this into your own code
+import { parseContentType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+// types used for parameters
+import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+
+/**
+ * Data parser. Extracts everything but the parameters from an RFC-compliant
+ * MediaType, and returns it as a single string.
+ *
+ * The result is returned as a lower-case string.
+ */
+export function parseContentType(
+    input: string,
+    onError: OnError = THROW_THE_ERROR,
+): string;
+```
+
+`parseContentType()` is a _data parser_. Use it to extract the `text/html` section from `text/html; charset=UTF-8` (for example).
+
+NOTE that `parseContentType()` always returns a lower-case string.
+
+If you need to preserve the case of the result string, have a look at our undocumented `parseContentTypeUnbound()` function.
 
 ### UnexpectedContentTypeError
 

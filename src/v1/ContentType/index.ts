@@ -32,6 +32,4 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 
-export * from "./Errors";
 export * from "./ContentType";
-export * from "./MediaType";

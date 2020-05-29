@@ -32,6 +32,14 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 
-export * from "./Errors";
-export * from "./ContentType";
-export * from "./MediaType";
+import { Branded } from "@ganbarodigital/ts-lib-value-objects/lib/v2";
+
+/**
+ * everything except the parameters from a MediaType,
+ *
+ * e.g. the `text/html` bit from `text/html; charset=UTF-8`
+ *
+ * At compile-time, this type resolves down to being a normal string.
+ * Think of it as an interface.
+ */
+export type ContentType = Branded<string, "ContentType">;
