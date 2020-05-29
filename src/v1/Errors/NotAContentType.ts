@@ -31,9 +31,61 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import {
+    AppError,
+    AppErrorParams,
+    ErrorTableTemplate,
+    ExtraPublicData,
+    StructuredProblemReport,
+    StructuredProblemReportDataWithExtraData,
+} from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
 
-export { ERROR_TABLE } from "./PackageErrorTable";
-export { NotAContentTypeError } from "./NotAContentType";
-export { NotAMediaTypeError } from "./NotAMediaType";
-export { MediaTypeMatchRegexIsBrokenError } from "./MediaTypeMatchRegexIsBroken";
-export { UnexpectedContentTypeError } from "./UnexpectedContentType";
+import { ERROR_TABLE } from ".";
+import { PackageErrorTable } from "./PackageErrorTable";
+
+export interface NotAContentTypeExtraData extends ExtraPublicData {
+    public: {
+        input: string;
+    };
+}
+
+export type NotAContentTypeTemplate = ErrorTableTemplate<
+    PackageErrorTable,
+    "not-a-content-type"
+>;
+
+export type NotAContentTypeData = StructuredProblemReportDataWithExtraData<
+    PackageErrorTable,
+    "not-a-content-type",
+    NotAContentTypeTemplate,
+    NotAContentTypeExtraData
+>;
+
+export type NotAContentTypeSPR = StructuredProblemReport<
+    PackageErrorTable,
+    "not-a-content-type",
+    NotAContentTypeTemplate,
+    NotAContentTypeExtraData,
+    NotAContentTypeData
+>;
+
+export class NotAContentTypeError extends AppError<
+    PackageErrorTable,
+    "not-a-content-type",
+    NotAContentTypeTemplate,
+    NotAContentTypeExtraData,
+    NotAContentTypeData,
+    NotAContentTypeSPR
+> {
+    public constructor(params: NotAContentTypeExtraData & AppErrorParams) {
+        const errorData: NotAContentTypeData = {
+            template: ERROR_TABLE["not-a-content-type"],
+            errorId: params.errorId,
+            extra: {
+                public: params.public,
+            },
+        };
+
+        super(StructuredProblemReport.from(errorData));
+    }
+}

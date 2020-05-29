@@ -19,6 +19,7 @@ This TypeScript library provides a `MediaType` _value type_ that validates and s
   - [ContentType Value Type](#contenttype-value-type)
   - [mustMatchContentType()](#mustmatchcontenttype)
   - [parseContentType()](#parsecontenttype)
+  - [NotAContentTypeError](#notacontenttypeerror)
   - [UnexpectedContentTypeError](#unexpectedcontenttypeerror)
 - [NPM Scripts](#npm-scripts)
   - [npm run clean](#npm-run-clean)
@@ -373,6 +374,29 @@ export function parseContentType(
 NOTE that `parseContentType()` always returns a lower-case string.
 
 If you need to preserve the case of the result string, have a look at our undocumented `parseContentTypeUnbound()` function.
+
+### NotAContentTypeError
+
+```typescript
+// how to import this into your own code
+import { NotAContentTypeError } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+// base class
+import { AppError, AppErrorParams } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+
+// params object structure
+export interface NotAContentTypeExtraData {
+    public: {
+        input: string;
+    };
+}
+
+export class NotAContentTypeError extends AppError {
+    public constructor(params: NotAContentTypeExtraData & AppErrorParams);
+}
+```
+
+`NotAContentTypeError` is a throwable, structured `Error`. It's thrown whenever a string doesn't have the expected structure of a content type.
 
 ### UnexpectedContentTypeError
 

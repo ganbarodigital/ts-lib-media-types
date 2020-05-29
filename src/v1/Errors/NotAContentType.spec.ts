@@ -31,9 +31,21 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import { expect } from "chai";
+import { describe } from "mocha";
 
-export { ERROR_TABLE } from "./PackageErrorTable";
-export { NotAContentTypeError } from "./NotAContentType";
-export { NotAMediaTypeError } from "./NotAMediaType";
-export { MediaTypeMatchRegexIsBrokenError } from "./MediaTypeMatchRegexIsBroken";
-export { UnexpectedContentTypeError } from "./UnexpectedContentType";
+import { NotAContentTypeError } from ".";
+
+describe("NotAContentTypeError", () => {
+    describe(".constructor()", () => {
+        it("creates a Javascript error", () => {
+            const unit = new NotAContentTypeError({
+                public: {
+                    input: "dummy",
+                },
+            });
+
+            expect(unit).to.be.instanceOf(Error);
+        });
+    });
+});

@@ -25,6 +25,7 @@ The following changes have been completed, and will be included in the next tagg
 
 * Content Types
   - added `ContentType` branded string
+  - added `NotAContentTypeError` throwable error
 
 ## v1.2.1
 
