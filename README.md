@@ -239,7 +239,7 @@ export function parseMediaType(
 
 NOTE that `parseMediaType()` converts everything except parameter values to lower-case.
 
-If you need to preserve the case of all the parts, have a look at our undocumented `parseMediaTypeUnbound()` function.
+If you need to preserve the case of all the parts, have a look at our undocumented `_parseMediaType()` function.
 
 ### mustBeMediaType()
 
@@ -390,7 +390,7 @@ export function contentTypeFromMediaType(
 
 NOTE that `contentTypeFromMediaType()` always returns a lower-case string.
 
-If you need to preserve the case of the result string, have a look at our undocumented `contentTypeFromMediaTypeUnbound()` function.
+If you need to preserve the case of the result string, have a look at our undocumented `_contentTypeFromMediaType()` function.
 
 ### mustMatchContentType()
 
@@ -454,6 +454,8 @@ export function mustBeContentType(input: string, onError: OnError = THROW_THE_ER
 
 ### parseContentType()
 
+**NOTE:** This function is deprecated. Use [`contentTypeFrom()`](#contenttypefrom) instead.
+
 ```typescript
 // how to import this into your own code
 import { parseContentType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
@@ -477,7 +479,7 @@ export function parseContentType(
 
 NOTE that `parseContentType()` always returns a lower-case string.
 
-If you need to preserve the case of the result string, have a look at our undocumented `parseContentTypeUnbound()` function.
+If you need to preserve the case of the result string, have a look at our undocumented `_parseContentType()` function.
 
 ### NotAContentTypeError
 

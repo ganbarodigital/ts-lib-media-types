@@ -33,9 +33,12 @@
 //
 import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
 
-import { NotAMediaTypeError } from "../Errors";
-import { MediaTypeMatchRegexIsBrokenError } from "../Errors/MediaTypeMatchRegexIsBroken";
+import {
+    MediaTypeMatchRegexIsBrokenError,
+    NotAMediaTypeError,
+} from "../Errors";
 import { MediaTypeMatchRegex } from "./regexes";
+import { _contentTypeFrom } from "../ContentType/contentTypeFrom";
 
 type CaseConverter = (input: string) => string;
 
@@ -44,10 +47,13 @@ type CaseConverter = (input: string) => string;
  * MediaType, and returns it as a single string.
  *
  * The result is returned as a lower-case string.
+ *
+ * @deprecated use `contentTypeFrom()` instead
  */
-export const parseContentType = parseContentTypeUnbound.bind(
+export const parseContentType = _parseContentType.bind(
     null,
     MediaTypeMatchRegex,
+    (x) => x.toLowerCase(),
 );
 
 /**
@@ -55,12 +61,14 @@ export const parseContentType = parseContentTypeUnbound.bind(
  * MediaType, and returns it as a single string.
  *
  * The result is run through the `caseConverter` function.
+ *
+ * @deprecated use `_contentTypeFrom()` instead
  */
-export function parseContentTypeUnbound(
+export function _parseContentType(
     matchRegex: RegExp,
+    caseConverter: CaseConverter,
     input: string,
     onError: OnError = THROW_THE_ERROR,
-    caseConverter: CaseConverter = (x) => x.toLocaleLowerCase(),
 ): string {
     const regResult = matchRegex.exec(input);
     if (regResult === null) {
@@ -73,5 +81,5 @@ export function parseContentTypeUnbound(
         throw onError(new MediaTypeMatchRegexIsBrokenError({}));
     }
 
-    return caseConverter(regResult.groups.contentType);
+    return _contentTypeFrom(caseConverter, regResult.groups.contentType);
 }

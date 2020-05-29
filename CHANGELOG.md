@@ -33,6 +33,10 @@ The following changes have been completed, and will be included in the next tagg
 * Errors
   - UnexpectedContentTypeError now requires a `ContentType` as the public data
 
+### Deprecations
+
+* `parseContentType()` is deprecated. Use `contentTypeFrom()` instead.
+
 ## v1.2.1
 
 Released Thursday, 28th May 2020.

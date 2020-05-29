@@ -36,7 +36,7 @@ import { describe } from "mocha";
 
 import { MediaTypeMatchRegexIsBrokenError } from "../Errors/MediaTypeMatchRegexIsBroken";
 import { InvalidMediaTypeExamples, ValidContentTypeFromMediaTypeExamples } from "./MediaTypeExamples.spec";
-import { parseContentType, parseContentTypeUnbound } from "./parseContentType";
+import { parseContentType, _parseContentType } from "./parseContentType";
 
 // a valid regex, that doesn't populate named groups
 const BrokenMatchRegex = /^.*$/;
@@ -60,8 +60,9 @@ describe("parseContentType()", () => {
 
     it("throws MediaTypeMatchRegexIsBrokenError if we use a garbage parser", () => {
         const inputValue = "text/plain";
-        expect(() => parseContentTypeUnbound(
+        expect(() => _parseContentType(
             BrokenMatchRegex,
+            (x) => x,
             inputValue,
         )).to.throw(MediaTypeMatchRegexIsBrokenError);
     });
