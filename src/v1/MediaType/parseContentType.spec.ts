@@ -35,7 +35,7 @@ import { expect } from "chai";
 import { describe } from "mocha";
 
 import { MediaTypeMatchRegexIsBrokenError } from "../Errors/MediaTypeMatchRegexIsBroken";
-import { InvalidMediaTypeExamples, ValidContentTypeExamples } from "./MediaTypeExamples.spec";
+import { InvalidMediaTypeExamples, ValidContentTypeFromMediaTypeExamples } from "./MediaTypeExamples.spec";
 import { parseContentType, parseContentTypeUnbound } from "./parseContentType";
 
 // a valid regex, that doesn't populate named groups
@@ -43,9 +43,9 @@ const BrokenMatchRegex = /^.*$/;
 
 describe("parseContentType()", () => {
     // tslint:disable-next-line: forin
-    for (const inputValue in ValidContentTypeExamples) {
+    for (const inputValue in ValidContentTypeFromMediaTypeExamples) {
         it("correctly parses '" + inputValue + '"', () => {
-            const expectedValue = ValidContentTypeExamples[inputValue];
+            const expectedValue = ValidContentTypeFromMediaTypeExamples[inputValue];
             const actualValue = parseContentType(inputValue);
 
             expect(actualValue).to.equal(expectedValue);

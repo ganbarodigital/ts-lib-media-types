@@ -31,6 +31,14 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import { ContentTypeMatchRegex } from "../MediaType/regexes";
 
-export * from "./ContentType";
-export * from "./isContentType";
+/**
+ * Data guard. Returns `true` if the input string matches the structure
+ * of an RFC2046 / RFC6838 media type that has no parameters.
+ *
+ * @param input
+ */
+export function isContentType(input: string): boolean {
+    return ContentTypeMatchRegex.test(input);
+}

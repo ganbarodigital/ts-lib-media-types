@@ -37,7 +37,7 @@ import { describe } from "mocha";
 import { MediaType } from ".";
 import {
     InvalidMediaTypeExamples,
-    ValidContentTypeExamples,
+    ValidContentTypeFromMediaTypeExamples,
     ValidMediaTypeExamples,
 } from "./MediaTypeExamples.spec";
 
@@ -61,9 +61,9 @@ describe("MediaType", () => {
 
     describe(".getContentType()", () => {
         // tslint:disable-next-line: forin
-        for (const inputValue in ValidContentTypeExamples) {
+        for (const inputValue in ValidContentTypeFromMediaTypeExamples) {
             it("correctly parses '" + inputValue + '"', () => {
-                const expectedValue = ValidContentTypeExamples[inputValue];
+                const expectedValue = ValidContentTypeFromMediaTypeExamples[inputValue];
                 const unit = new MediaType(inputValue);
 
                 const actualValue = unit.getContentType();

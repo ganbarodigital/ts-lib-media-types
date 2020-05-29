@@ -18,6 +18,7 @@ This TypeScript library provides a `MediaType` _value type_ that validates and s
 - [ContentType](#contenttype)
   - [ContentType Value Type](#contenttype-value-type)
   - [mustMatchContentType()](#mustmatchcontenttype)
+  - [isContentType()](#iscontenttype)
   - [parseContentType()](#parsecontenttype)
   - [NotAContentTypeError](#notacontenttypeerror)
   - [UnexpectedContentTypeError](#unexpectedcontenttypeerror)
@@ -347,6 +348,23 @@ export function mustMatchContentType(
 ```
 
 `mustMatchContentType()` is a _data guarantee_. Use it to prove that your `input` `MediaType` matches the `MediaTypes` on your safelist.
+
+### isContentType()
+
+```typescript
+// how to import this into your own code
+import { isContentType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+/**
+ * Data guard. Returns `true` if the input string matches the structure
+ * of an RFC2046 / RFC6838 media type that has no parameters.
+ *
+ * @param input
+ */
+export function isContentType(input: string): boolean;
+```
+
+`isContentType()` is a _data guard_. Use it to prove that the given `input` string contains a valid [content type](#contenttype-value-type).
 
 ### parseContentType()
 

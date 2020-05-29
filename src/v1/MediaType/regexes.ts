@@ -32,6 +32,13 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 
+//
+// We keep all the regexes in a single file for ease of maintenance.
+//
+
+// tslint:disable-next-line: max-line-length
+export const ContentTypeMatchRegex = /^(?<contentType>(?<type>[A-Za-z0-9][-\w!#$&^]*)\/((?<tree>[A-Za-z0-9][\w\d-!#$&^]*)\.){0,1}(?<subtype>[^+()<>@,;:\\/"[\]?=+]+)(\+(?<suffix>[\w\d]+)){0,1})$/;
+
 // tslint:disable-next-line: max-line-length
 export const MediaTypeMatchRegex = /^(?<contentType>(?<type>[A-Za-z0-9][-\w!#$&^]*)\/((?<tree>[A-Za-z0-9][\w\d-!#$&^]*)\.){0,1}(?<subtype>[^+()<>@,;:\\/"[\]?=+]+)(\+(?<suffix>[\w\d]+)){0,1})(;[\s]+(?<parameter>[\w\d]+=([^+()<>@,;:\\/"[\]?=]+|"[^"]*\")))*$/;
 
