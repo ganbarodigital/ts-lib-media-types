@@ -34,5 +34,6 @@
 
 export * from "./ContentType";
 export * from "./contentTypeFrom";
+export * from "./contentTypeFromMediaType";
 export * from "./isContentType";
 export * from "./mustBeContentType";

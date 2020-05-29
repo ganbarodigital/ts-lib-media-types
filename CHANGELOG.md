@@ -26,6 +26,7 @@ The following changes have been completed, and will be included in the next tagg
 * Content Types
   - added `ContentType` branded string
   - added `contentTypeFrom()` smart constructor
+  - added `contentTypeFromMediaType()` smart constructor
   - added `isContentType()` data guard
   - added `mustBeContentType()` data guarantee
   - added `NotAContentTypeError` throwable error

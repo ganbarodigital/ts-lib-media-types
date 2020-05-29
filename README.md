@@ -362,6 +362,34 @@ export function contentTypeFrom(input: string, onError: OnError = THROW_THE_ERRO
 
 ```contentTypeFrom()` is a _smart constructor_. Use it to create a `ContentType` value.
 
+### contentTypeFromMediaType()
+
+```typescript
+// how to import this into your own code
+import { contentTypeFromMediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+// types used for parameters
+import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+import { ContentType, MediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+/**
+ * Data parser. Extracts everything but the parameters from an RFC-compliant
+ * MediaType, and returns it as a single valeue.
+ *
+ * The result is always returned as a lower-case string.
+ */
+export function contentTypeFromMediaType(
+    input: MediaType,
+    onError: OnError = THROW_THE_ERROR,
+): ContentType;
+```
+
+`contentTypeFromMediaType()` is a _smart constructor_. Use it to extract the `text/html` section from `text/html; charset=UTF-8` (for example).
+
+NOTE that `contentTypeFromMediaType()` always returns a lower-case string.
+
+If you need to preserve the case of the result string, have a look at our undocumented `contentTypeFromMediaTypeUnbound()` function.
+
 ### mustMatchContentType()
 
 ```typescript
