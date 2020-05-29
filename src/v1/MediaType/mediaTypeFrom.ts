@@ -31,13 +31,10 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import { MediaType } from "./MediaType";
 
-export * from "./isMediaType";
-export * from "./matchesContentType";
-export * from "./mustBeMediaType";
-export * from "./mustMatchContentType";
-export * from "./mediaTypeFrom";
-export * from "./MediaType";
-export * from "./MediaTypeParts";
-export * from "./parseContentType";
-export * from "./parseMediaType";
+/**
+ * Smart constructor. Creates MediaType values from RFC-compliant
+ * media type strings.
+ */
+export const mediaTypeFrom = MediaType.from;

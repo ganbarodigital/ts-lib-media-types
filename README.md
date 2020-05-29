@@ -6,7 +6,8 @@ This TypeScript library provides a `MediaType` _value type_ that validates and s
 
 - [Introduction](#introduction)
 - [Quick Start](#quick-start)
-- [MediaType](#mediatype)
+- [MediaTypes](#mediatypes)
+  - [mediaTypeFrom()](#mediatypefrom)
   - [MediaType Value Type](#mediatype-value-type)
   - [MediaTypeParts Value Type](#mediatypeparts-value-type)
   - [isMediaType()](#ismediatype)
@@ -49,7 +50,19 @@ import { MediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1"
 
 __VS Code users:__ once you've added a single import anywhere in your project, you'll then be able to auto-import anything else that this library exports.
 
-## MediaType
+## MediaTypes
+
+### mediaTypeFrom()
+
+```typescript
+/**
+ * Smart constructor. Creates MediaType values from RFC-compliant
+ * media type strings.
+ */
+export function mediaTypeFrom(input: string, onError: OnError = THROW_THE_ERROR): MediaType;
+```
+
+`mediaTypeFrom()` is a _smart constructor_. It creates a new [`MediaType`](#mediatype-value-type) from the given input string.
 
 ### MediaType Value Type
 
@@ -93,7 +106,7 @@ Here's how to create it, and how to use it:
 import { MediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
 
 // create a value object
-const myMediaType = new MediaType("text/html; charset=UTF-8");
+const myMediaType = mediaTypeFrom("text/html; charset=UTF-8");
 
 // it will auto-convert to a string in most places
 console.log("myMediaType is: " + myMediaType);
@@ -109,7 +122,7 @@ If you try to create a `MediaType` from something that isn't a well-formed media
 import { MediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
 
 // throws NotAMediaTypeError
-const myMediaType = new MediaType("text");
+const myMediaType = mediaTypeFrom("text");
 ```
 
 ### MediaTypeParts Value Type
@@ -169,7 +182,7 @@ import { MediaType, parseMediaType } from "@ganbarodigital/ts-lib-mediatype/lib/
 
 const parts1 = parseMediaType("text/html; charset=UTF-8");
 
-const myMediaType = new MediaType("text/html; charset=UTF-8");
+const myMediaType = mediaTypeFrom("text/html; charset=UTF-8");
 const parts2 = myMediaType.parse();
 
 // at this point, parts1 and parts2 contain the same information

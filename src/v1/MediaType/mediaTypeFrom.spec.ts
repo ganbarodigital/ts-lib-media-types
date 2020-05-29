@@ -31,13 +31,17 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import { expect } from "chai";
+import { describe } from "mocha";
 
-export * from "./isMediaType";
-export * from "./matchesContentType";
-export * from "./mustBeMediaType";
-export * from "./mustMatchContentType";
-export * from "./mediaTypeFrom";
-export * from "./MediaType";
-export * from "./MediaTypeParts";
-export * from "./parseContentType";
-export * from "./parseMediaType";
+import { mediaTypeFrom } from ".";
+import { MediaType } from "./MediaType";
+
+describe("mediaTypeFrom()", () => {
+    it("creates a MediaType", () => {
+        const inputValue = "text/html";
+
+        const actualValue = mediaTypeFrom(inputValue);
+        expect(actualValue instanceof MediaType).to.equal(true);
+    })
+});

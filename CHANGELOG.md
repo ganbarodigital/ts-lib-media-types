@@ -37,6 +37,10 @@ The following changes have been completed, and will be included in the next tagg
   - added `ContentTypeOrMediaType` type
   - added `resolveToContentType()` helper
   - added `resolveToMediaType()` helper
+* Media Types
+  - added `mediaTypeFrom()` smart constructor
+    - it is an alias for `MediaType.from()`
+  - added `MediaType.from()` static smart constructor
 
 ### Deprecations
 

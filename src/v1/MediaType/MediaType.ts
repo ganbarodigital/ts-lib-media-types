@@ -44,6 +44,16 @@ import { parseMediaType } from "./parseMediaType";
  */
 export class MediaType extends RefinedString {
     /**
+     * smart constructor.
+     *
+     * calls your `onError` handler if `input` isn't a well-formatted
+     * media type
+     */
+    static from(input: string, onError: OnError = THROW_THE_ERROR) {
+        return new MediaType(input, onError);
+    }
+
+    /**
      * internal cache. Stops us having to extract the content type
      * from our value more than once
      */
@@ -60,6 +70,8 @@ export class MediaType extends RefinedString {
      *
      * calls your `onError` handler if `input` isn't a well-formatted
      * media type
+     *
+     * for forward compatibility, call `mediaTypeFrom()` instead
      */
     public constructor(input: string, onError: OnError = THROW_THE_ERROR) {
         super(input, mustBeMediaType, onError);
