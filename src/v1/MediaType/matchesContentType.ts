@@ -32,7 +32,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 
-import { MediaType } from "./MediaType";
+import { ContentTypeOrMediaType, resolveToContentType } from "../Helpers";
 
 /**
  * Data guard. Returns `true` if your `input` matches any of the MediaTypes
@@ -42,13 +42,16 @@ import { MediaType } from "./MediaType";
  *
  * Use `mustMatchMediaType()` for the corresponding data guarantee.
  */
-export function matchesContentType(input: MediaType, safelist: MediaType[]): boolean {
+export function matchesContentType(
+    input: ContentTypeOrMediaType,
+    safelist: ContentTypeOrMediaType[],
+): boolean {
     // what content type do we have?
-    const inputType = input.getContentType();
+    const inputType = resolveToContentType(input);
 
     // we only need a single match
-    return safelist.some((possible) => {
-        const possibleType = possible.getContentType();
-        return inputType === possibleType;
+    return safelist.some((entry) => {
+        const safeCT = resolveToContentType(entry);
+        return inputType === safeCT;
     });
 }

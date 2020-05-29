@@ -35,32 +35,41 @@ import { expect } from "chai";
 import { describe } from "mocha";
 
 import { MediaTypeMatchRegexIsBrokenError } from "../Errors/MediaTypeMatchRegexIsBroken";
-import { InvalidMediaTypeExamples, ValidContentTypeFromMediaTypeExamples } from "./MediaTypeExamples.spec";
-import { parseContentType, _parseContentType } from "./parseContentType";
+import { ValidContentTypeFromMediaTypeExamples } from "../MediaType/MediaTypeExamples.spec";
+import { contentTypeFromMediaType } from ".";
+import {_contentTypeFromMediaType } from "./contentTypeFromMediaType";
+import { MediaType } from "../MediaType/MediaType";
+import { NotAMediaTypeError } from "../Errors";
+
+// a valid regex that never matches a media type
+const NeverMatchesRegex = /^THISWILLNEVERMATCH$/;
 
 // a valid regex, that doesn't populate named groups
 const BrokenMatchRegex = /^.*$/;
 
-describe("parseContentType()", () => {
+describe("contentTypeFromMediaType()", () => {
     // tslint:disable-next-line: forin
     for (const inputValue in ValidContentTypeFromMediaTypeExamples) {
         it("correctly parses '" + inputValue + '"', () => {
             const expectedValue = ValidContentTypeFromMediaTypeExamples[inputValue];
-            const actualValue = parseContentType(inputValue);
+            const actualValue = contentTypeFromMediaType(new MediaType(inputValue));
 
             expect(actualValue).to.equal(expectedValue);
         });
     }
 
-    for (const inputValue of InvalidMediaTypeExamples) {
-        it("rejects example '" + inputValue + "'", () => {
-            expect(() => parseContentType(inputValue)).to.throw();
-        });
-    }
+    it("throws NotAMediaTypeError if (somehow) we pass an invalid media type in", () => {
+        const inputValue = new MediaType("text/plain");
+        expect(() => _contentTypeFromMediaType(
+            NeverMatchesRegex,
+            (x) => x,
+            inputValue,
+        )).to.throw(NotAMediaTypeError);
+    });
 
     it("throws MediaTypeMatchRegexIsBrokenError if we use a garbage parser", () => {
-        const inputValue = "text/plain";
-        expect(() => _parseContentType(
+        const inputValue = new MediaType("text/plain");
+        expect(() => _contentTypeFromMediaType(
             BrokenMatchRegex,
             (x) => x,
             inputValue,

@@ -44,6 +44,16 @@ import { parseMediaType } from "./parseMediaType";
  */
 export class MediaType extends RefinedString {
     /**
+     * smart constructor.
+     *
+     * calls your `onError` handler if `input` isn't a well-formatted
+     * media type
+     */
+    static from(input: string, onError: OnError = THROW_THE_ERROR) {
+        return new MediaType(input, onError);
+    }
+
+    /**
      * internal cache. Stops us having to extract the content type
      * from our value more than once
      */
@@ -60,6 +70,8 @@ export class MediaType extends RefinedString {
      *
      * calls your `onError` handler if `input` isn't a well-formatted
      * media type
+     *
+     * for forward compatibility, call `mediaTypeFrom()` instead
      */
     public constructor(input: string, onError: OnError = THROW_THE_ERROR) {
         super(input, mustBeMediaType, onError);
@@ -67,12 +79,14 @@ export class MediaType extends RefinedString {
 
     /**
      * Gets the 'text/html' bit from 'text/html; charset=UTF-8' (for example)
+     *
+     * @deprecated use `contentTypeFromMediaType()` instead
      */
     public getContentType(): string {
         // haven't we already done this?
         if (!this.#contentType) {
             // no, first time for everything!
-            this.#contentType = parseContentType(this.value, THROW_THE_ERROR);
+            this.#contentType = parseContentType(this.valueOf());
         }
 
         // return our cached value

@@ -6,18 +6,30 @@ This TypeScript library provides a `MediaType` _value type_ that validates and s
 
 - [Introduction](#introduction)
 - [Quick Start](#quick-start)
-- [v1 API](#v1-api)
+- [MediaTypes](#mediatypes)
+  - [mediaTypeFrom()](#mediatypefrom)
   - [MediaType Value Type](#mediatype-value-type)
   - [MediaTypeParts Value Type](#mediatypeparts-value-type)
   - [isMediaType()](#ismediatype)
   - [matchesContentType()](#matchescontenttype)
-  - [parseContentType()](#parsecontenttype)
   - [parseMediaType()](#parsemediatype)
   - [mustBeMediaType()](#mustbemediatype)
-  - [mustMatchContentType()](#mustmatchcontenttype)
   - [MediaTypeMatchRegexIsBrokenError](#mediatypematchregexisbrokenerror)
   - [NotAMediaTypeError](#notamediatypeerror)
+- [ContentType](#contenttype)
+  - [ContentType Value Type](#contenttype-value-type)
+  - [contentTypeFrom()](#contenttypefrom)
+  - [contentTypeFromMediaType()](#contenttypefrommediatype)
+  - [mustMatchContentType()](#mustmatchcontenttype)
+  - [isContentType()](#iscontenttype)
+  - [mustBeContentType()](#mustbecontenttype)
+  - [parseContentType()](#parsecontenttype)
+  - [NotAContentTypeError](#notacontenttypeerror)
   - [UnexpectedContentTypeError](#unexpectedcontenttypeerror)
+- [Helpers](#helpers)
+  - [ContentTypeOrMediaType](#contenttypeormediatype)
+  - [resolveToContentType()](#resolvetocontenttype)
+  - [resolveToMediaType()](#resolvetomediatype)
 - [NPM Scripts](#npm-scripts)
   - [npm run clean](#npm-run-clean)
   - [npm run build](#npm-run-build)
@@ -38,7 +50,19 @@ import { MediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1"
 
 __VS Code users:__ once you've added a single import anywhere in your project, you'll then be able to auto-import anything else that this library exports.
 
-## v1 API
+## MediaTypes
+
+### mediaTypeFrom()
+
+```typescript
+/**
+ * Smart constructor. Creates MediaType values from RFC-compliant
+ * media type strings.
+ */
+export function mediaTypeFrom(input: string, onError: OnError = THROW_THE_ERROR): MediaType;
+```
+
+`mediaTypeFrom()` is a _smart constructor_. It creates a new [`MediaType`](#mediatype-value-type) from the given input string.
 
 ### MediaType Value Type
 
@@ -82,7 +106,7 @@ Here's how to create it, and how to use it:
 import { MediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
 
 // create a value object
-const myMediaType = new MediaType("text/html; charset=UTF-8");
+const myMediaType = mediaTypeFrom("text/html; charset=UTF-8");
 
 // it will auto-convert to a string in most places
 console.log("myMediaType is: " + myMediaType);
@@ -98,7 +122,7 @@ If you try to create a `MediaType` from something that isn't a well-formed media
 import { MediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
 
 // throws NotAMediaTypeError
-const myMediaType = new MediaType("text");
+const myMediaType = mediaTypeFrom("text");
 ```
 
 ### MediaTypeParts Value Type
@@ -158,7 +182,7 @@ import { MediaType, parseMediaType } from "@ganbarodigital/ts-lib-mediatype/lib/
 
 const parts1 = parseMediaType("text/html; charset=UTF-8");
 
-const myMediaType = new MediaType("text/html; charset=UTF-8");
+const myMediaType = mediaTypeFrom("text/html; charset=UTF-8");
 const parts2 = myMediaType.parse();
 
 // at this point, parts1 and parts2 contain the same information
@@ -190,7 +214,7 @@ export function isMediaType(input: string): boolean;
 import { matchesContentType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
 
 // types used for parameters
-import { MediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+import { ContentTypeOrMediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
 
 /**
  * Data guard. Returns `true` if your `input` matches any of the MediaTypes
@@ -200,7 +224,10 @@ import { MediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
  *
  * Use `mustMatchMediaType()` for the corresponding data guarantee.
  */
-export function matchesContentType(input: MediaType, safelist: MediaType[]): boolean;
+export function matchesContentType(
+    input: ContentTypeOrMediaType,
+    safelist: ContentTypeOrMediaType[]
+): boolean;
 ```
 
 `matchesContentType()` is a _data guard_. Use it to prove that a given MediaType matches any entry in a safelist.
@@ -209,33 +236,6 @@ The comparison:
 
 * ignores the case of all the MediaTypes
 * ignores any parameters present in each MediaType
-
-### parseContentType()
-
-```typescript
-// how to import this into your own code
-import { parseContentType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
-
-// types used for parameters
-import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
-
-/**
- * Data parser. Extracts everything but the parameters from an RFC-compliant
- * MediaType, and returns it as a single string.
- *
- * The result is returned as a lower-case string.
- */
-export function parseContentType(
-    input: string,
-    onError: OnError = THROW_THE_ERROR,
-): string;
-```
-
-`parseContentType()` is a _data parser_. Use it to extract the `text/html` section from `text/html; charset=UTF-8` (for example).
-
-NOTE that `parseContentType()` always returns a lower-case string.
-
-If you need to preserve the case of the result string, have a look at our undocumented `parseContentTypeUnbound()` function.
 
 ### parseMediaType()
 
@@ -260,7 +260,7 @@ export function parseMediaType(
 
 NOTE that `parseMediaType()` converts everything except parameter values to lower-case.
 
-If you need to preserve the case of all the parts, have a look at our undocumented `parseMediaTypeUnbound()` function.
+If you need to preserve the case of all the parts, have a look at our undocumented `_parseMediaType()` function.
 
 ### mustBeMediaType()
 
@@ -282,31 +282,6 @@ export function mustBeMediaType(input: string, onError: OnError = THROW_THE_ERRO
 ```
 
 `mustBeMediaType()` is a _data guarantee_. Use it to ensure that the given string has the structure of a RFC-compliant media type.
-
-### mustMatchContentType()
-
-```typescript
-// how to import this into your own code
-import { mustMatchContentType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
-
-// types used for parameters
-import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
-import { MediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
-
-/**
- * Data guarantee. Calls your onError handler if the given input
- * doesn't match any of the MediaTypes on the given safelist.
- *
- * We compare everything except the parameters of the MediaTypes.
- */
-export function mustMatchContentType(
-    input: MediaType,
-    safelist: MediaType[],
-    onError: OnError = THROW_THE_ERROR
-): void;
-```
-
-`mustMatchContentType()` is a _data guarantee_. Use it to prove that your `input` `MediaType` matches the `MediaTypes` on your safelist.
 
 ### MediaTypeMatchRegexIsBrokenError
 
@@ -349,6 +324,207 @@ export class NotAMediaTypeError extends AppError {
 
 `NotAMediaTypeError` is a throwable, structured `Error`. It's thrown whenever a string doesn't have the expected structure of a media type.
 
+## ContentType
+
+### ContentType Value Type
+
+```typescript
+// how to import this into your own code
+import { ContentType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+/**
+ * everything except the parameters from a MediaType,
+ *
+ * e.g. the `text/html` bit from `text/html; charset=UTF-8`
+ *
+ * At compile-time, this type resolves down to being a normal string.
+ * Think of it as an interface.
+ */
+export type ContentType = Branded<string, "ContentType">;
+```
+
+`ContentType` is a _value type_. It holds everything except the parameters from a `MediaType`.
+
+NOTE that `ContentType` is an `interface`, not a `class`. It's a type that only exists at compile-time. You can't use it with the `instanceof` operator at runtime.
+
+Use `contentTypeFrom()` to create a new `ContentType` value:
+
+```typescript
+const myContentType = contentTypeFrom("text/html");
+```
+
+While you can technically do this:
+
+```typescript
+const myContentType = "text/html" as ContentType;
+```
+
+it's an unsafe practice.
+
+* `XXX as Type` is a compiler override. It bypasses the compiler's type checking. It should only ever be used as a last resort.
+* `contentTypeFrom()` will catch any silly mistakes that aren't a well-formatted content type.
+* It will break if we ever change the underlying definition of `ContentType` in the future, whereas using `contentTypeFrom()` guarantees forward-compatibility.
+
+### contentTypeFrom()
+
+```typescript
+// how to import this into your own code
+import { contentTypeFrom } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+// types used in parameters / return values
+import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+
+/**
+ * Smart constructor. Creates a validated `ContentType` from your given
+ * input string.
+ *
+ * The returned ContentType is always in lower case.
+ */
+export function contentTypeFrom(input: string, onError: OnError = THROW_THE_ERROR): ContentType;
+```
+
+```contentTypeFrom()` is a _smart constructor_. Use it to create a `ContentType` value.
+
+### contentTypeFromMediaType()
+
+```typescript
+// how to import this into your own code
+import { contentTypeFromMediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+// types used for parameters
+import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+import { ContentType, MediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+/**
+ * Data parser. Extracts everything but the parameters from an RFC-compliant
+ * MediaType, and returns it as a single valeue.
+ *
+ * The result is always returned as a lower-case string.
+ */
+export function contentTypeFromMediaType(
+    input: MediaType,
+    onError: OnError = THROW_THE_ERROR,
+): ContentType;
+```
+
+`contentTypeFromMediaType()` is a _smart constructor_. Use it to extract the `text/html` section from `text/html; charset=UTF-8` (for example).
+
+NOTE that `contentTypeFromMediaType()` always returns a lower-case string.
+
+If you need to preserve the case of the result string, have a look at our undocumented `_contentTypeFromMediaType()` function.
+
+### mustMatchContentType()
+
+```typescript
+// how to import this into your own code
+import { mustMatchContentType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+// types used for parameters
+import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+import { ContentTypeOrMediaType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+/**
+ * Data guarantee. Calls your onError handler if the given input
+ * doesn't match any of the MediaTypes on the given safelist.
+ *
+ * We compare everything except the parameters of the MediaTypes.
+ */
+export function mustMatchContentType(
+    input: ContentTypeOrMediaType,
+    safelist: ContentTypeOrMediaType[],
+    onError: OnError = THROW_THE_ERROR
+): void;
+```
+
+`mustMatchContentType()` is a _data guarantee_. Use it to prove that your `input` `MediaType` matches the `MediaTypes` on your safelist.
+
+### isContentType()
+
+```typescript
+// how to import this into your own code
+import { isContentType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+/**
+ * Data guard. Returns `true` if the input string matches the structure
+ * of an RFC2046 / RFC6838 media type that has no parameters.
+ *
+ * @param input
+ */
+export function isContentType(input: string): boolean;
+```
+
+`isContentType()` is a _data guard_. Use it to prove that the given `input` string contains a valid [content type](#contenttype-value-type).
+
+### mustBeContentType()
+
+```typescript
+// how to import this into your own code
+import { isContentType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+// types used in parameters / return values
+import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+
+/**
+ * Data guarantee. Calls your onError handler if the given input
+ * isn't an RFC-2045 / 6838-compliant MediaType that has no parameters.
+ */
+export function mustBeContentType(input: string, onError: OnError = THROW_THE_ERROR): void;
+```
+
+`mustBeContentType()` is a _data guarantee_. Use it to prove that the given `input` string is a valid content type.
+
+### parseContentType()
+
+**NOTE:** This function is deprecated. Use [`contentTypeFrom()`](#contenttypefrom) instead.
+
+```typescript
+// how to import this into your own code
+import { parseContentType } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+// types used for parameters
+import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+
+/**
+ * Data parser. Extracts everything but the parameters from an RFC-compliant
+ * MediaType, and returns it as a single string.
+ *
+ * The result is returned as a lower-case string.
+ */
+export function parseContentType(
+    input: string,
+    onError: OnError = THROW_THE_ERROR,
+): string;
+```
+
+`parseContentType()` is a _data parser_. Use it to extract the `text/html` section from `text/html; charset=UTF-8` (for example).
+
+NOTE that `parseContentType()` always returns a lower-case string.
+
+If you need to preserve the case of the result string, have a look at our undocumented `_parseContentType()` function.
+
+### NotAContentTypeError
+
+```typescript
+// how to import this into your own code
+import { NotAContentTypeError } from "@ganbarodigital/ts-lib-mediatype/lib/v1";
+
+// base class
+import { AppError, AppErrorParams } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+
+// params object structure
+export interface NotAContentTypeExtraData {
+    public: {
+        input: string;
+    };
+}
+
+export class NotAContentTypeError extends AppError {
+    public constructor(params: NotAContentTypeExtraData & AppErrorParams);
+}
+```
+
+`NotAContentTypeError` is a throwable, structured `Error`. It's thrown whenever a string doesn't have the expected structure of a content type.
+
 ### UnexpectedContentTypeError
 
 ```typescript
@@ -361,9 +537,9 @@ import { AppError, AppErrorParams } from "@ganbarodigital/ts-lib-error-reporting
 // params object structure
 export interface UnexpectedContentTypeExtraData {
     public: {
-        input: string;
+        input: ContentType;
         required: {
-            anyOf: string[];
+            anyOf: ContentType[];
         }
     };
 }
@@ -374,6 +550,44 @@ export class UnexpectedContentTypeError extends AppError {
 ```
 
 `UnexpectedContentTypeError` is a throwable, structured `Error`. It's thrown whenever a given input `MediaType` doesn't match any of `MediaType`s in a given safelist.
+
+## Helpers
+
+### ContentTypeOrMediaType
+
+```typescript
+/**
+ * where either type will do
+ *
+ * use `resolveToContentType()` or `resolveToMediaType()` to turn
+ * your values into one or the other
+ */
+export type ContentTypeOrMediaType = ContentType | MediaType;
+```
+
+### resolveToContentType()
+
+```typescript
+/**
+ * is it a ContentType? is it a MediaType? whatever it is, we
+ * turn it onto a ContentType
+ */
+export function resolveToContentType(input: ContentTypeOrMediaType): ContentType;
+```
+
+`resolveToContentType()` is a _data resolver_. It converts the given input to always be a `ContentType`.
+
+### resolveToMediaType()
+
+```typescript
+/**
+ * is it a ContentType? is it a MediaType? whatever it is, we
+ * turn it onto a MediaType
+ */
+export function resolveToMediaType(input: ContentTypeOrMediaType): MediaType;
+```
+
+`resolveToMediaType()` is a _data resolver_. It converts the given input to always be a `MediaType`.
 
 ## NPM Scripts
 

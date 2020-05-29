@@ -35,17 +35,18 @@ import { expect } from "chai";
 import { describe } from "mocha";
 
 import { UnexpectedContentTypeError } from ".";
+import { contentTypeFrom } from "../ContentType";
 
 describe("UnexpectedContentTypeError", () => {
     describe(".constructor()", () => {
         it("creates a Javascript error", () => {
             const unit = new UnexpectedContentTypeError({
                 public: {
-                    input: "text/html",
+                    input: contentTypeFrom("text/html"),
                     required: {
                         anyOf: [
-                            "text/json",
-                            "application/vnd.an-example+json",
+                            contentTypeFrom("text/json"),
+                            contentTypeFrom("application/vnd.an-example+json"),
                         ],
                     }
                 }

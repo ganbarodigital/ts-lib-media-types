@@ -33,39 +33,55 @@
 //
 import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
 
-import { UnexpectedContentTypeError } from "../Errors/UnexpectedContentType";
-import { matchesContentType } from "./matchesContentType";
-import { resolveToContentType, ContentTypeOrMediaType } from "../Helpers";
+import { NotAMediaTypeError } from "../Errors";
+import { ContentType } from ".";
+import { MediaTypeMatchRegex } from "../MediaType/regexes";
+import { MediaTypeMatchRegexIsBrokenError } from "../Errors/MediaTypeMatchRegexIsBroken";
+import { MediaType } from "../MediaType/MediaType";
+import { _contentTypeFrom } from "./contentTypeFrom";
 
 /**
- * Data guarantee. Calls your onError handler if the given input
- * doesn't match any of the MediaTypes on the given safelist.
+ * Smart constructor. Extracts everything but the parameters from an RFC-compliant
+ * MediaType, and returns it as a ContentType.
  *
- * We compare everything except the parameters of the MediaTypes.
+ * The ContentType is always in lower-case.
  */
-export function mustMatchContentType(
-    input: ContentTypeOrMediaType,
-    safelist: ContentTypeOrMediaType[],
+export const contentTypeFromMediaType = _contentTypeFromMediaType.bind(
+    null,
+    MediaTypeMatchRegex,
+    (x) => x.toLowerCase(),
+);
+
+type CaseConverter = (x: string) => string;
+
+/**
+ * Smart constructor. Extracts everything but the parameters from an RFC-compliant
+ * MediaType, and returns it as a ContentType.
+ *
+ * The result is run through the `caseConverter` function.
+ */
+export function _contentTypeFromMediaType(
+    matchRegex: RegExp,
+    caseConverter: CaseConverter,
+    input: MediaType,
     onError: OnError = THROW_THE_ERROR,
-): void {
-    // does it match?
-    if (matchesContentType(input, safelist)) {
-        // yes it does!
-        return;
+): ContentType {
+    // shorthand
+    const mt = input.valueOf();
+
+    const regResult = matchRegex.exec(mt);
+    if (regResult === null) {
+        throw onError(new NotAMediaTypeError({public: {input: mt}}));
     }
 
-    // which content types have we checked it against?
-    const checkedAgainst = safelist.map(
-        (mt) => resolveToContentType(mt)
-    );
+    // special case - the regex has no named groups in it any more
+    if (regResult.groups === undefined) {
+        throw onError(new MediaTypeMatchRegexIsBrokenError({}));
+    }
 
-    // tell the caller what happened
-    onError(new UnexpectedContentTypeError({
-        public: {
-            input: resolveToContentType(input),
-            required: {
-                anyOf: checkedAgainst,
-            },
-        }
-    }));
+    // yes, this means we're parsing the ContentType twice
+    //
+    // this guarantees forward-compatibility, and it will catch any
+    // errors where the ContentType and MediaType regexes have diverged
+    return _contentTypeFrom(caseConverter, regResult.groups.contentType);
 }

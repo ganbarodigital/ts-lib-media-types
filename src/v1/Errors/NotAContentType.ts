@@ -31,41 +31,61 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
-import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+import {
+    AppError,
+    AppErrorParams,
+    ErrorTableTemplate,
+    ExtraPublicData,
+    StructuredProblemReport,
+    StructuredProblemReportDataWithExtraData,
+} from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
 
-import { UnexpectedContentTypeError } from "../Errors/UnexpectedContentType";
-import { matchesContentType } from "./matchesContentType";
-import { resolveToContentType, ContentTypeOrMediaType } from "../Helpers";
+import { ERROR_TABLE } from ".";
+import { PackageErrorTable } from "./PackageErrorTable";
 
-/**
- * Data guarantee. Calls your onError handler if the given input
- * doesn't match any of the MediaTypes on the given safelist.
- *
- * We compare everything except the parameters of the MediaTypes.
- */
-export function mustMatchContentType(
-    input: ContentTypeOrMediaType,
-    safelist: ContentTypeOrMediaType[],
-    onError: OnError = THROW_THE_ERROR,
-): void {
-    // does it match?
-    if (matchesContentType(input, safelist)) {
-        // yes it does!
-        return;
-    }
+export interface NotAContentTypeExtraData extends ExtraPublicData {
+    public: {
+        input: string;
+    };
+}
 
-    // which content types have we checked it against?
-    const checkedAgainst = safelist.map(
-        (mt) => resolveToContentType(mt)
-    );
+export type NotAContentTypeTemplate = ErrorTableTemplate<
+    PackageErrorTable,
+    "not-a-content-type"
+>;
 
-    // tell the caller what happened
-    onError(new UnexpectedContentTypeError({
-        public: {
-            input: resolveToContentType(input),
-            required: {
-                anyOf: checkedAgainst,
+export type NotAContentTypeData = StructuredProblemReportDataWithExtraData<
+    PackageErrorTable,
+    "not-a-content-type",
+    NotAContentTypeTemplate,
+    NotAContentTypeExtraData
+>;
+
+export type NotAContentTypeSPR = StructuredProblemReport<
+    PackageErrorTable,
+    "not-a-content-type",
+    NotAContentTypeTemplate,
+    NotAContentTypeExtraData,
+    NotAContentTypeData
+>;
+
+export class NotAContentTypeError extends AppError<
+    PackageErrorTable,
+    "not-a-content-type",
+    NotAContentTypeTemplate,
+    NotAContentTypeExtraData,
+    NotAContentTypeData,
+    NotAContentTypeSPR
+> {
+    public constructor(params: NotAContentTypeExtraData & AppErrorParams) {
+        const errorData: NotAContentTypeData = {
+            template: ERROR_TABLE["not-a-content-type"],
+            errorId: params.errorId,
+            extra: {
+                public: params.public,
             },
-        }
-    }));
+        };
+
+        super(StructuredProblemReport.from(errorData));
+    }
 }

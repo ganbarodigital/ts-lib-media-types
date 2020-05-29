@@ -33,39 +33,22 @@
 //
 import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
 
-import { UnexpectedContentTypeError } from "../Errors/UnexpectedContentType";
-import { matchesContentType } from "./matchesContentType";
-import { resolveToContentType, ContentTypeOrMediaType } from "../Helpers";
+import { NotAContentTypeError } from "../Errors";
+import { isContentType } from "./isContentType";
 
 /**
  * Data guarantee. Calls your onError handler if the given input
- * doesn't match any of the MediaTypes on the given safelist.
+ * isn't an RFC-2045 / 6838-compliant MediaType that has no parameters.
  *
- * We compare everything except the parameters of the MediaTypes.
+ * @param input
+ *        this string to be validated
  */
-export function mustMatchContentType(
-    input: ContentTypeOrMediaType,
-    safelist: ContentTypeOrMediaType[],
-    onError: OnError = THROW_THE_ERROR,
-): void {
-    // does it match?
-    if (matchesContentType(input, safelist)) {
-        // yes it does!
+export function mustBeContentType(input: string, onError: OnError = THROW_THE_ERROR): void {
+    // do we have a string with the right structure?
+    if (isContentType(input)) {
         return;
     }
 
-    // which content types have we checked it against?
-    const checkedAgainst = safelist.map(
-        (mt) => resolveToContentType(mt)
-    );
-
-    // tell the caller what happened
-    onError(new UnexpectedContentTypeError({
-        public: {
-            input: resolveToContentType(input),
-            required: {
-                anyOf: checkedAgainst,
-            },
-        }
-    }));
+    // if we get here, your string failed to validate
+    onError(new NotAContentTypeError({public: {input}}));
 }

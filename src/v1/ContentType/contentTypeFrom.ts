@@ -33,39 +33,38 @@
 //
 import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
 
-import { UnexpectedContentTypeError } from "../Errors/UnexpectedContentType";
-import { matchesContentType } from "./matchesContentType";
-import { resolveToContentType, ContentTypeOrMediaType } from "../Helpers";
+import { ContentType } from "./ContentType";
+import { mustBeContentType } from "./mustBeContentType";
 
 /**
- * Data guarantee. Calls your onError handler if the given input
- * doesn't match any of the MediaTypes on the given safelist.
+ * Smart constructor. Takes a string that contains everything but the
+ * parameters from an RFC-compliant MediaType, and returns it as a
+ * ContentType value.
  *
- * We compare everything except the parameters of the MediaTypes.
+ * The ContentType is always in lower-case.
  */
-export function mustMatchContentType(
-    input: ContentTypeOrMediaType,
-    safelist: ContentTypeOrMediaType[],
+export const contentTypeFrom = _contentTypeFrom.bind(
+    null,
+    (x) => x.toLowerCase(),
+);
+
+type CaseConverter = (x: string) => string;
+
+/**
+ * Smart constructor. Takes a string that contains everything but the
+ * parameters from an RFC-compliant MediaType, and returns it as a
+ * ContentType value.
+ *
+ * The result is run through the `caseConverter` function.
+ */
+export function _contentTypeFrom(
+    caseConverter: CaseConverter,
+    input: string,
     onError: OnError = THROW_THE_ERROR,
-): void {
-    // does it match?
-    if (matchesContentType(input, safelist)) {
-        // yes it does!
-        return;
-    }
+): ContentType {
+    // make sure all the regexes match
+    mustBeContentType(input, onError);
 
-    // which content types have we checked it against?
-    const checkedAgainst = safelist.map(
-        (mt) => resolveToContentType(mt)
-    );
-
-    // tell the caller what happened
-    onError(new UnexpectedContentTypeError({
-        public: {
-            input: resolveToContentType(input),
-            required: {
-                anyOf: checkedAgainst,
-            },
-        }
-    }));
+    // all done
+    return caseConverter(input) as ContentType;
 }

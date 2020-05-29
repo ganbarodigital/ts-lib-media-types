@@ -36,6 +36,7 @@ export * from "./isMediaType";
 export * from "./matchesContentType";
 export * from "./mustBeMediaType";
 export * from "./mustMatchContentType";
+export * from "./mediaTypeFrom";
 export * from "./MediaType";
 export * from "./MediaTypeParts";
 export * from "./parseContentType";

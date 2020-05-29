@@ -105,7 +105,15 @@ export const InvalidMediaTypeExamples = [
     "text/plain; boundary=123:456",
 ];
 
-export const ValidContentTypeExamples: ContentTypeExamples = {
+export const ValidContentTypeExamples = [
+    "text/plain",
+    "application/vnd.record",
+    "application/vnd.tie-record",
+    "application/vnd.tie-record+json",
+    "application/vnd.oai.openapi+json",
+];
+
+export const ValidContentTypeFromMediaTypeExamples: ContentTypeExamples = {
     "text/plain": "text/plain",
     "text/plain; charset=us-ascii": "text/plain",
     'text/plain; charset="us-ascii"': "text/plain",

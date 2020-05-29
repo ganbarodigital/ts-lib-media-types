@@ -31,41 +31,28 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
-import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+import { expect } from "chai";
+import { describe } from "mocha";
 
-import { UnexpectedContentTypeError } from "../Errors/UnexpectedContentType";
-import { matchesContentType } from "./matchesContentType";
-import { resolveToContentType, ContentTypeOrMediaType } from "../Helpers";
+import { isContentType } from "./isContentType";
+import { InvalidMediaTypeExamples, ValidContentTypeExamples } from "../MediaType/MediaTypeExamples.spec";
 
-/**
- * Data guarantee. Calls your onError handler if the given input
- * doesn't match any of the MediaTypes on the given safelist.
- *
- * We compare everything except the parameters of the MediaTypes.
- */
-export function mustMatchContentType(
-    input: ContentTypeOrMediaType,
-    safelist: ContentTypeOrMediaType[],
-    onError: OnError = THROW_THE_ERROR,
-): void {
-    // does it match?
-    if (matchesContentType(input, safelist)) {
-        // yes it does!
-        return;
+describe("isContentType()", () => {
+    for (const inputValue of ValidContentTypeExamples) {
+        it("accepts example '" + inputValue + "'", () => {
+            const expectedValue = true;
+            const actualValue = isContentType(inputValue);
+
+            expect(actualValue).to.equal(expectedValue);
+        });
     }
 
-    // which content types have we checked it against?
-    const checkedAgainst = safelist.map(
-        (mt) => resolveToContentType(mt)
-    );
+    for (const inputValue of InvalidMediaTypeExamples) {
+        it("rejects example '" + inputValue + "'", () => {
+            const expectedValue = false;
+            const actualValue = isContentType(inputValue);
 
-    // tell the caller what happened
-    onError(new UnexpectedContentTypeError({
-        public: {
-            input: resolveToContentType(input),
-            required: {
-                anyOf: checkedAgainst,
-            },
-        }
-    }));
-}
+            expect(actualValue).to.equal(expectedValue);
+        });
+    }
+});

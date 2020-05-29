@@ -33,6 +33,7 @@
 //
 
 export { ERROR_TABLE } from "./PackageErrorTable";
+export { NotAContentTypeError } from "./NotAContentType";
 export { NotAMediaTypeError } from "./NotAMediaType";
 export { MediaTypeMatchRegexIsBrokenError } from "./MediaTypeMatchRegexIsBroken";
 export { UnexpectedContentTypeError } from "./UnexpectedContentType";

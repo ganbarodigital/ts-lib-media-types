@@ -36,6 +36,7 @@ import { httpStatusCodeFrom } from "@ganbarodigital/ts-lib-http-types/lib/v1";
 import { packageNameFrom } from "@ganbarodigital/ts-lib-packagename/lib/v1";
 
 import { MediaTypeMatchRegexIsBrokenTemplate } from "./MediaTypeMatchRegexIsBroken";
+import { NotAContentTypeTemplate } from "./NotAContentType";
 import { NotAMediaTypeTemplate } from "./NotAMediaType";
 import { UnexpectedContentTypeTemplate } from "./UnexpectedContentType";
 
@@ -51,6 +52,13 @@ export class PackageErrorTable implements ErrorTable {
         errorName: "mediatypematchregex-is-broken",
         detail: "the MediaTypeMatchRegex no longer returns the expected named groups",
         status: httpStatusCodeFrom(500),
+    };
+
+    public "not-a-content-type": NotAContentTypeTemplate = {
+        packageName: PACKAGE_NAME,
+        errorName: "not-a-content-type",
+        detail: "the given string does not have the structure of a ContentType",
+        status: httpStatusCodeFrom(422),
     };
 
     public "not-a-media-type": NotAMediaTypeTemplate = {

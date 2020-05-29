@@ -21,6 +21,35 @@ For each release, changes are grouped under these headings:
 
 The following changes have been completed, and will be included in the next tagged release.
 
+## v1.3.0
+
+Released Friday, 29th May 2020.
+
+### New
+
+* Content Types
+  - added `ContentType` branded string
+  - added `contentTypeFrom()` smart constructor
+  - added `contentTypeFromMediaType()` smart constructor
+  - added `isContentType()` data guard
+  - added `mustBeContentType()` data guarantee
+  - added `NotAContentTypeError` throwable error
+  - `matchesContentType()` and `mustMatchContentType()` now accept any mix of ContentTypes or MediaTypes
+* Errors
+  - UnexpectedContentTypeError now requires a `ContentType` as the public data
+* Helpers
+  - added `ContentTypeOrMediaType` type
+  - added `resolveToContentType()` helper
+  - added `resolveToMediaType()` helper
+* Media Types
+  - added `mediaTypeFrom()` smart constructor
+    - it is an alias for `MediaType.from()`
+  - added `MediaType.from()` static smart constructor
+
+### Deprecations
+
+* `parseContentType()` is deprecated. Use `contentTypeFrom()` instead.
+
 ## v1.2.1
 
 Released Thursday, 28th May 2020.
