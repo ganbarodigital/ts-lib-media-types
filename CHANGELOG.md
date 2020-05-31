@@ -21,6 +21,15 @@ For each release, changes are grouped under these headings:
 
 The following changes have been completed, and will be included in the next tagged release.
 
+## v1.3.1
+
+Released Sunday, 31st May 2020.
+
+### Fixes
+
+* Helpers
+  - now exported from the top-level of the package
+
 ## v1.3.0
 
 Released Friday, 29th May 2020.
